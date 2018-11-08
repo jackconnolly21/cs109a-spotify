@@ -1,3 +1,4 @@
 *._DS_Store
 *.pyc
 *large_files/*.*
+*.ipynb_checkpoints/*
