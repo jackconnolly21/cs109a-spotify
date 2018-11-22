@@ -1,0 +1,5 @@
+# ignore the data folder
+mpd.vs/
+
+# ignore checkpoints 
+.ipynb_checkpoints/
