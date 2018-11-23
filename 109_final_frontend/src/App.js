@@ -8,10 +8,17 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/InputBase';
 import SuggestionsTable from './components/suggestions_table'
+// import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
+// const theme = createMuiTheme({
+//     palette: {
+//         type: "dark"
+//     }
+// });
 
 class App extends Component {
   
+
   
   handleChange = name => event => {
     return this.setState({name: event.target.value})
@@ -76,7 +83,7 @@ class App extends Component {
   render() {
 
     return (
-      <div>   
+      <div> 
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit">
@@ -89,12 +96,14 @@ class App extends Component {
         </Toolbar>
       </AppBar>
 
-      <Grid item xs={12} style={{paddingTop: '10%'}}>
+      <Grid item xs={12} style={{paddingTop: '150px'}}>
         <Grid container  justify="center" spacing={32}>
-          <Grid item style={{width: '50%'}}>
+          <Grid item style={{width: '600px'}}>
             <CustomTable data={this.state.current_playlist} /> 
-            <SuggestionsTable data={this.state.suggestion_data} handler={this.add_song_handler.bind(this)}/> 
           </Grid>
+          <Grid item style={{width: '800px', height: '500px'}}> 
+            <SuggestionsTable data={this.state.suggestion_data} handler={this.add_song_handler.bind(this)}/>
+          </Grid> 
           <Grid item>
             <SuggestedVis data={this.state.vis_data} />
           </Grid>

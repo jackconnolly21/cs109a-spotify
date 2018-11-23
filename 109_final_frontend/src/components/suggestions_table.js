@@ -22,6 +22,7 @@ class SuggestionsTable extends Component {
               <TableCell>Artist</TableCell>
               <TableCell>Album</TableCell>
               <TableCell>Score</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

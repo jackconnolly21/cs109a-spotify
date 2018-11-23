@@ -28,19 +28,12 @@ def sample_from_list(playlist_songs, network, u_to_s, s_to_u, uri=True, num_samp
         all_samples = np.append(all_samples, sample)
     
     unique, counts = np.unique(all_samples, return_counts=True)
-    # counts = (1. / np.sum(counts)) * counts
+    
     counted_samples = zip(unique, counts)
+    counted_samples = [sample for sample in counted_samples if sample[0] not in playlist_songs]
     counted_samples = sorted(counted_samples, key=lambda x: x[1], reverse=True)
     
     num_to_return = min(15, len(counted_samples))
-    
-    # to_return = []
-    # if as_names : 
-    # 	to_return = [{'x': u_to_s[s[0]], 'y': int(s[1])} for s in counted_samples[:num_to_return]]
-    # else : 
-    # 	to_return = [{'x': s[0], 'y': int(s[1])} for s in counted_samples[:num_to_return]
-
-    # return to_return
 
     return counted_samples[:num_to_return]
 
