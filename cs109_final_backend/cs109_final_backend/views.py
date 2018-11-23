@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 import pickle 
 import numpy as np
 import json
+from rest_framework.decorators import api_view
 
 with open('cs109_final_backend/network_files/pickled_network.pickle', 'rb') as f: 
 	NETWORK = pickle.load(f)
@@ -17,7 +18,7 @@ with open('cs109_final_backend/network_files/track_to_artist_album.pickle', 'rb'
 	TRACK_TO_ARTIST_ALBUM = pickle.load(f)
 
 
-def sample_from_list(playlist_songs, network, u_to_s, s_to_u, uri=True, num_samples=1000, as_names=True): 
+def sample_from_list(playlist_songs, network, u_to_s, s_to_u, uri=True, num_samples=2000, as_names=True): 
     if not uri : 
         playlist_songs = [s_to_u[s] for s in playlist_songs]
         
@@ -27,33 +28,65 @@ def sample_from_list(playlist_songs, network, u_to_s, s_to_u, uri=True, num_samp
         all_samples = np.append(all_samples, sample)
     
     unique, counts = np.unique(all_samples, return_counts=True)
+    # counts = (1. / np.sum(counts)) * counts
     counted_samples = zip(unique, counts)
     counted_samples = sorted(counted_samples, key=lambda x: x[1], reverse=True)
     
     num_to_return = min(15, len(counted_samples))
     
     # to_return = []
-    if as_names : 
-    	to_return = [{'x': u_to_s[s[0]], 'y': int(s[1])} for s in counted_samples[:num_to_return]]
-    else : 
-    	to_return = [{'x': s[0], 'y': int(s[1])} for s in counted_samples[:num_to_return]]
+    # if as_names : 
+    # 	to_return = [{'x': u_to_s[s[0]], 'y': int(s[1])} for s in counted_samples[:num_to_return]]
+    # else : 
+    # 	to_return = [{'x': s[0], 'y': int(s[1])} for s in counted_samples[:num_to_return]
 
-    return to_return
+    # return to_return
+
+    return counted_samples[:num_to_return]
 
 
-@csrf_exempt
+@api_view(['POST'])
 def network_most_likely(request): 
+	
+	# data for the visualization
+	#vis_songs = sample_from_list(request.data['songs'], NETWORK, URI_TO_SONG, SONGS_TO_URI, uri=False)
 
-	vis_songs = sample_from_list(['Party In The U.S.A.'], NETWORK, URI_TO_SONG, SONGS_TO_URI, uri=False)
-	# song_album_artist = []
-	# for song in vis_songs : 
- #  		song_album_artist.append({'song_name': song[0]
- #  								'artist_name': TRACK_TO_ARTIST_ALBUM[SONGS_TO_URI[s[0]]]['artist'], 
- #  								'album_name': TRACK_TO_ARTIST_ALBUM[SONGS_TO_URI[s[0]]]['album']
- #  								})
+	songs_with_weights = sample_from_list(request.data['songs'], NETWORK, URI_TO_SONG, SONGS_TO_URI, uri=False)
 
-  	# to_return = {'vis_data': vis_songs, 'current': song_album_artist}
+	vis_data = [{'x': URI_TO_SONG[s[0]], 'y': int(s[1])} for s in songs_with_weights]
 
-	return JsonResponse(vis_songs, safe=False)
+	suggestion_data = [{'song_name': URI_TO_SONG[s[0]], 
+						'artist_name' : TRACK_TO_ARTIST_ALBUM[s[0]]['artist'], 
+						'album_name': TRACK_TO_ARTIST_ALBUM[s[0]]['album'], 
+						'score' : int(s[1])
+						} for s in songs_with_weights ]
+
+	num_suggestions = min(5, len(suggestion_data))
+	suggestion_data = suggestion_data[:num_suggestions]
+
+	to_return = {'vis_data' : vis_data, 'suggestion_data' : suggestion_data}
+
+	return JsonResponse(to_return, safe=False)
+
+
+@api_view(['POST'])
+def song_name_to_info(request): 
+	song_name = request.data['song']
+	if song_name in SONGS_TO_URI : 
+		song_uri = SONGS_TO_URI[song_name]
+		album_name = TRACK_TO_ARTIST_ALBUM[song_uri]['album']
+		artist_name = TRACK_TO_ARTIST_ALBUM[song_uri]['artist']
+		return JsonResponse({'success' : True, 'data' : {'song_name' : song_name, 'album_name': album_name, 'artist_name': artist_name}})
+
+	else : 
+		return JsonResponse({'success': False})
+
+
+
+
+
+
+
+
 
 

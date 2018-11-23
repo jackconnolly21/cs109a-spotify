@@ -75,6 +75,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cs109_final_backend.wsgi.application'
 
 
+# Rest Framework
+REST_FRAMEWORK = {
+    # other settings...
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': [],
+}
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
