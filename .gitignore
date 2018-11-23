@@ -8,3 +8,5 @@ mpd.v1/
 *large_files/*.*
 *.ipynb_checkpoints/*
 
+*.pickle
+*db.sqlite3
