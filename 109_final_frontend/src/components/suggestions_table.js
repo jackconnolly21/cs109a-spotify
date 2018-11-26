@@ -6,15 +6,19 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-
-// import Paper from '@material-ui/core/Paper';
-
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 class SuggestionsTable extends Component {
   render() {
 
     return (
-    	<Paper>  
+    	<Paper>
+        <Toolbar>
+          <Typography variant="h6" id="tableTitle">Suggested Song Additions</Typography> 
+          <div style={{flexGrow: 1}}></div> 
+          <Button variant="contained" color="secondary" onClick={() => this.props.refresh()}>Refresh</Button> 
+        </Toolbar>   
         <Table>
           <TableHead>
             <TableRow>
@@ -28,7 +32,7 @@ class SuggestionsTable extends Component {
           <TableBody>
           {this.props.data.map(row => {
             return (
-              <TableRow>
+              <TableRow hover>
                 <TableCell>{row.song_name}</TableCell>
                 <TableCell>{row.artist_name}</TableCell>
                 <TableCell>{row.album_name}</TableCell>

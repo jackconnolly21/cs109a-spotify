@@ -10,7 +10,8 @@ const style = {
 	paddingTop: '30px', 
 	paddingBottom: '30px', 
 	paddingLeft: '30px', 
-	paddingRight: '30px'
+	paddingRight: '30px', 
+	textAlign: 'center'
 }
 
 
@@ -19,9 +20,10 @@ class SuggestedVis extends Component {
   	
     return (
     	<Paper style={style}> 
+    		Song Predictions (Likelyhood)
 			<XYPlot height={500} width={400} xType="ordinal" margin={{bottom: 150}}>
-			 	<XAxis tickLabelAngle={-90} />
-  				<YAxis />
+			 	<XAxis tickLabelAngle={-90}  title="Song"/>
+  				<YAxis title="Prediction Score"/>
   				<HorizontalGridLines />
   				<VerticalBarSeries data={this.props.data} /> 
 			</XYPlot>

@@ -18,7 +18,7 @@ with open('cs109_final_backend/network_files/track_to_artist_album.pickle', 'rb'
 	TRACK_TO_ARTIST_ALBUM = pickle.load(f)
 
 
-def sample_from_list(playlist_songs, network, u_to_s, s_to_u, uri=True, num_samples=2000, as_names=True): 
+def sample_from_list(playlist_songs, network, u_to_s, s_to_u, uri=True, num_samples=4000, as_names=True): 
     if not uri : 
         playlist_songs = [s_to_u[s] for s in playlist_songs]
         
@@ -29,6 +29,8 @@ def sample_from_list(playlist_songs, network, u_to_s, s_to_u, uri=True, num_samp
     
     unique, counts = np.unique(all_samples, return_counts=True)
     
+    counts = 100 * counts.astype(float) / np.sum(counts)
+    # print (counts)
     counted_samples = zip(unique, counts)
     counted_samples = [sample for sample in counted_samples if sample[0] not in playlist_songs]
     counted_samples = sorted(counted_samples, key=lambda x: x[1], reverse=True)
@@ -46,12 +48,12 @@ def network_most_likely(request):
 
 	songs_with_weights = sample_from_list(request.data['songs'], NETWORK, URI_TO_SONG, SONGS_TO_URI, uri=False)
 
-	vis_data = [{'x': URI_TO_SONG[s[0]], 'y': int(s[1])} for s in songs_with_weights]
+	vis_data = [{'x': URI_TO_SONG[s[0]][:20], 'y': round(float(s[1]), 3)} for s in songs_with_weights]
 
 	suggestion_data = [{'song_name': URI_TO_SONG[s[0]], 
 						'artist_name' : TRACK_TO_ARTIST_ALBUM[s[0]]['artist'], 
 						'album_name': TRACK_TO_ARTIST_ALBUM[s[0]]['album'], 
-						'score' : int(s[1])
+						'score' : round(float(s[1]),3)
 						} for s in songs_with_weights ]
 
 	num_suggestions = min(5, len(suggestion_data))

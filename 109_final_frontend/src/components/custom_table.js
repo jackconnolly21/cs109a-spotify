@@ -6,8 +6,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
-// import Paper from '@material-ui/core/Paper';
 
 
 class CustomTable extends Component {
@@ -32,7 +33,10 @@ class CustomTable extends Component {
     const empty_rows = this.state.rows_per_page - Math.min(this.state.rows_per_page, this.props.data.length - this.state.page * this.state.rows_per_page);
 
     return (
-    	<Paper>  
+    	<Paper>
+        <Toolbar >
+          <Typography>Current Playlist</Typography> 
+        </Toolbar>   
         <Table>
           <TableHead>
             <TableRow>
@@ -46,7 +50,7 @@ class CustomTable extends Component {
             .slice(this.state.page * this.state.rows_per_page, this.state.page *  this.state.rows_per_page + this.state.rows_per_page)
             .map(row => {
             return (
-              <TableRow>
+              <TableRow hover>
                 <TableCell>{row.song_name}</TableCell>
                 <TableCell>{row.artist_name}</TableCell>
                 <TableCell>{row.album_name}</TableCell>
@@ -61,7 +65,7 @@ class CustomTable extends Component {
         </TableBody>
         </Table> 
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10]}
           component="div"
           count={this.props.data.length}
           rowsPerPage={this.state.rows_per_page}
