@@ -15,7 +15,7 @@ class SuggestionsTable extends Component {
     return (
     	<Paper>
         <Toolbar>
-          <Typography variant="h6" id="tableTitle">Suggested Song Additions</Typography> 
+          <Typography variant="h6" id="tableTitle">Suggested Song Additions: {this.props.name}</Typography> 
           <div style={{flexGrow: 1}}></div> 
           <Button variant="contained" color="secondary" onClick={() => this.props.refresh()}>Refresh</Button> 
         </Toolbar>   

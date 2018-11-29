@@ -61,12 +61,12 @@ class App extends Component {
     this.state = { vis_data: [],
                     suggestion_data: [],  
                   current_playlist: 
-                    // [{'artist_name': 'Miley Cyrus', 
-                    //   'album_name' : 'The Time of Our Lives', 
-                    //   'song_name' : 'Party In The U.S.A.'}], 
-                      [{'artist_name': 'John Mayer', 
-                      'song_name': 'Waiting On the World to Change',
-                      'album_name': 'Continuum'}], 
+                    [{'artist_name': 'Miley Cyrus', 
+                      'album_name' : 'The Time of Our Lives', 
+                      'song_name' : 'Party In The U.S.A.'}], 
+                      // [{'artist_name': 'John Mayer', 
+                      // 'song_name': 'Waiting On the World to Change',
+                      // 'album_name': 'Continuum'}], 
                   add_name: '', 
                   };
 
@@ -104,6 +104,7 @@ class App extends Component {
                 data={this.state.suggestion_data} 
                 handler={this.add_song_handler.bind(this)}
                 refresh={this.update_predictions.bind(this)}
+                name="Network"
             />
           </Grid> 
           <Grid item>

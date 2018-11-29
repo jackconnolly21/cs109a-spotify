@@ -1,18 +1,38 @@
 import json
 import numpy as np
-import pickle
+import sys
+import pickle 
 
 
-# 
+NUMBER_OF_FILES_TO_USE = 5
+
+# After running into issues trying to pickle large objects (ie our graph), 
+# It turns out that there's an issue in the pickle implementation. This stack overflow function 
+# allows for easy saving of big objects 
+# https://stackoverflow.com/questions/42653386/does-pickle-randomly-fail-with-oserror-on-large-files
+def save_as_pickled_object(obj, filepath):
+    """
+    This is a defensive way to write pickle.write, allowing for very large files on all platforms
+    """
+    max_bytes = 2**31 - 1
+    bytes_out = pickle.dumps(obj)
+    n_bytes = sys.getsizeof(bytes_out)
+    with open(filepath, 'wb') as f_out:
+        for idx in range(0, n_bytes, max_bytes):
+            f_out.write(bytes_out[idx:idx+max_bytes])
+
+
+"""
+The code below builds the 
+"""
 song_name_to_uri = {}
 uri_to_song_name = {}
+track_to_artist_album = {}
 network = {}
 
 f_start = 0
 f_end = 999
-
-# open the first n files, and read them into the network 
-for i in range(20) : 
+for i in range(NUMBER_OF_FILES_TO_USE) : 
     with open('./mpd.v1/data/mpd.slice.{}-{}.json'.format(f_start, f_end)) as f : 
         data = json.load(f)
         
@@ -23,7 +43,9 @@ for i in range(20) :
             track_uri = song['track_uri']
             shared_songs = np.array([s['track_uri'] for s in playlist['tracks'] if s['track_uri'] != track_uri])
 
-            
+            if track_uri not in track_to_artist_album:
+                track_to_artist_album[track_uri] = {'artist': song['artist_name'], 'album': song['album_name']}
+                
             
             if track_name not in song_name_to_uri : 
                 song_name_to_uri[track_name] = track_uri
@@ -41,21 +63,23 @@ for i in range(20) :
     f_end += 1000
     
 
-# clean the network (switch to counts rather then multiple edges) 
+# clean the network -> counts per song (normalized)
 print("Cleaning up the Network a bit")
 for uri in network : 
     unique, counts = np.unique(network[uri], return_counts=True)
     network[uri] = {'songs' : unique, 'counts': counts / np.sum(counts)}
 
 
-# Save the network 
-with open('basic_network_20.pickle', 'wb') as f:
-    pickle.dump(network, f)
+
+
+# Save all of the objects 
+save_as_pickled_object(network, 'pickled_network.pickle')
 
 with open('songs_to_uri.pickle', 'wb') as f:
     pickle.dump(song_name_to_uri, f)
 
-with open('uri_to_song', 'wb') as f:
+with open('uri_to_song.pickel', 'wb') as f:
     pickle.dump(uri_to_song_name, f)
 
-
+with open('track_to_artist_album.pickel', 'wb') as f:
+    pickle.dump(track_to_artist_album, f)
