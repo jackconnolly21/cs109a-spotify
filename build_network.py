@@ -33,7 +33,9 @@ network = {}
 f_start = 0
 f_end = 999
 for i in range(NUMBER_OF_FILES_TO_USE) : 
-    with open('./mpd.v1/data/mpd.slice.{}-{}.json'.format(f_start, f_end)) as f : 
+    # data_path = 'large_files/'
+    data_path = './mpd.v1/data/'
+    with open(data_path + 'mpd.slice.{}-{}.json'.format(f_start, f_end)) as f : 
         data = json.load(f)
         
     for playlist in data['playlists'] : 
