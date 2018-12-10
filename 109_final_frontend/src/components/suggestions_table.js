@@ -41,7 +41,7 @@ class SuggestionsTable extends Component {
                     <Button 
                     variant="contained" 
                     color="primary"
-                    onClick={() => this.props.handler(row.song_name)}
+                    onClick={() => this.props.handler(row)}
                     >
                     Add
                     </Button>

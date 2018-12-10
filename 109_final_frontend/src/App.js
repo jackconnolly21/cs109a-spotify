@@ -24,7 +24,7 @@ class App extends Component {
       headers: {
             "Content-Type": "application/json; charset=utf-8",
       },
-      body: JSON.stringify({'songs' : this.state.current_playlist.map(row => {return row.song_name})}) 
+      body: JSON.stringify({'songs' : this.state.current_playlist.map(row => {return row.uri})}) 
       })
       .then(response => response.json())
       .then(data => {
@@ -32,27 +32,39 @@ class App extends Component {
       });
   }
 
-  add_song_handler (name)  {
+  add_song_handler (row)  {
       // Get the info for the song trying to be added 
-      fetch('http://127.0.0.1:8000/song-to-info', {
-      method: 'post',
-      headers: {
-            "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({'song' : name}) 
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          var new_playlist = this.state.current_playlist.concat(data.data);
-          this.setState({current_playlist: new_playlist}); 
-          this.update_predictions()
-        }
-        else {
-          alert('Error Adding Song')
-        }
+      // fetch('http://127.0.0.1:8000/song-to-info', {
+      // method: 'post',
+      // headers: {
+      //       "Content-Type": "application/json; charset=utf-8",
+      // },
+      // body: JSON.stringify({'song' : name}) 
+      // })
+      // .then(response => response.json())
+      // .then(data => {
+      //   if (data.success) {
+      //     var new_playlist = this.state.current_playlist.concat(data.data);
+      //     this.setState({current_playlist: new_playlist}); 
+      //     this.update_predictions()
+      //   }
+      //   else {
+      //     alert('Error Adding Song')
+      //   }
 
-      });
+      // });
+
+      const new_row = {'artist_name' : row.artist_name, 
+                        'song_name' : row.song_name, 
+                        'album_name' : row.album_name, 
+                        'uri' : row.uri, 
+                      };
+      const new_playlist = this.state.current_playlist.concat(new_row);
+
+      this.setState({current_playlist: new_playlist}, this.update_predictions); 
+      // console.log(this.state.current_playlist)
+      // this.update_predictions(); 
+
   }
 
 
@@ -61,12 +73,18 @@ class App extends Component {
     this.state = { vis_data: [],
                     suggestion_data: [],  
                   current_playlist: 
-                    [{'artist_name': 'Miley Cyrus', 
-                      'album_name' : 'The Time of Our Lives', 
-                      'song_name' : 'Party In The U.S.A.'}], 
+                    // [{'artist_name': 'Miley Cyrus', 
+                    //   'album_name' : 'The Time of Our Lives', 
+                    //   'song_name' : 'Party In The U.S.A.', 
+                    //   'uri' : 'spotify:track:5Q0Nhxo0l2bP3pNjpGJwV1'}], 
+                    [{'artist_name': 'Future', 
+                      'album_name' : 'FUTURE', 
+                      'song_name' : 'Mask Off', 
+                      'uri' : 'spotify:track:0VgkVdmE4gld66l8iyGjgx'}],
                       // [{'artist_name': 'John Mayer', 
                       // 'song_name': 'Waiting On the World to Change',
-                      // 'album_name': 'Continuum'}], 
+                      // 'album_name': 'Continuum', 
+                      // 'uri' : 'spotify:track:5imShWWzwqfAJ9gXFpGAQh'}], 
                   add_name: '', 
                   };
 
@@ -76,7 +94,6 @@ class App extends Component {
 
   componentDidMount(){
     this.update_predictions(); 
-
   }
 
   render() {

@@ -4,7 +4,7 @@ import sys
 import pickle 
 
 
-NUMBER_OF_FILES_TO_USE = 5
+NUMBER_OF_FILES_TO_USE = 14
 
 # After running into issues trying to pickle large objects (ie our graph), 
 # It turns out that there's an issue in the pickle implementation. This stack overflow function 
@@ -30,8 +30,8 @@ uri_to_song_name = {}
 track_to_artist_album = {}
 network = {}
 
-f_start = 0
-f_end = 999
+f_start = 1000
+f_end = 1999
 for i in range(NUMBER_OF_FILES_TO_USE) : 
     # data_path = 'large_files/'
     data_path = './mpd.v1/data/'
