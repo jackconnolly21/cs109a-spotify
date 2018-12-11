@@ -15,7 +15,7 @@ This can include noting any key papers, texts, other software sources, talks or 
 ## Modeling Approach: 
 What was your baseline model for comparison? What further models did you implement? Description of your implementations beyond the baseline model. Briefly summarize any changes in your project goals or implementation plans you have made along the way. These changes are a natural part of any project, even those that seem the most straightforward at the beginning. The story you tell about how you arrived at your results can powerfully illustrate your process.
 
-Link to model demonstration: (http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/ "Our Model Demonstration")
+Link to model demonstration: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/)
 
 ## Results: 
 Describe the results and emphasize the most important results. Did you have to reconsider some of the original assumptions?
