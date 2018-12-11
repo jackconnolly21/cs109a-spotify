@@ -36,6 +36,8 @@ _What was your baseline model for comparison? What further models did you implem
 
 Link to model demonstration: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/)
 
+<iframe src="http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/"> </iframe> 
+
 ## Results: 
 _Describe the results and emphasize the most important results. Did you have to reconsider some of the original assumptions?_
 
