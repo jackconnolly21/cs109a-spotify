@@ -4,7 +4,7 @@ import sys
 import pickle 
 
 
-NUMBER_OF_FILES_TO_USE = 14
+NUMBER_OF_FILES_TO_USE = 5
 
 # After running into issues trying to pickle large objects (ie our graph), 
 # It turns out that there's an issue in the pickle implementation. This stack overflow function 
@@ -77,11 +77,11 @@ for uri in network :
 # Save all of the objects 
 save_as_pickled_object(network, 'pickled_network.pickle')
 
-with open('songs_to_uri.pickle', 'wb') as f:
-    pickle.dump(song_name_to_uri, f)
+# with open('songs_to_uri.pickle', 'wb') as f:
+#     pickle.dump(song_name_to_uri, f)
 
-with open('uri_to_song.pickel', 'wb') as f:
+with open('uri_to_song.pickle', 'wb') as f:
     pickle.dump(uri_to_song_name, f)
 
-with open('track_to_artist_album.pickel', 'wb') as f:
+with open('track_to_artist_album.pickle', 'wb') as f:
     pickle.dump(track_to_artist_album, f)
