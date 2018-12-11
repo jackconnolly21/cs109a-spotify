@@ -24,4 +24,4 @@ Review what was discussed in the Overview and Motivation sections (don’t repea
 ## Future work: 
 Discuss extensions to and new directions for your work. What do you think would be interesting to pursue next? Are there any ideas worth exploring that you didn’t get a chance to explore?
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/rZ1wYYvsc2M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="900" height="715" src="http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
