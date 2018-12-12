@@ -129,7 +129,6 @@ The more formal mathematical description of these metrics can again be found in 
 
 For a model based solely on choosing like-tracks in a probabalistic way, the network based approach performs impressively. While we did not have access to the official spotify test datasets, our tests suggest that our network based model is competitive with other submissions to the Spotify RecSys competition. The average scores of our model based on the three scoring metrics described earlier are as follows:
 
-<center>
 
 _Mean Scores by K_
 
@@ -145,7 +144,6 @@ _Mean Scores by K_
 
 ![](network_means_vs_k.png)
 
-</center>
 
 Above we can start to see trends in the various evaluation methods. It's important to note that because of constraints on local processing power, the network does not necessarily have nodes for all of the test songs which is hurting performance, but a natural drawback of the Markov-chain approach: namely the model itself is quite large. We counter this by randomly sampling songs from the network with equal weight whenever a seed song is not in the network.
 
@@ -161,17 +159,13 @@ But why does the Markov-chain model apparently do so much better with the RPrec 
 
 Moving on though, let's take a closer look at the score distributions mased on K. First the below figure gives a quick glance of where the scores are in general.
 
-<center>
 _Distribution of Scores by K; Summary_
 ![](overlayed_network_dists.png)
-</center>
 
 The above graph, however, only gives us a basic idea of what's going on. There are two many lines to allow us to analyze the behavior at each K value. Thus, let's take a closer look at the distributions for each score at each K value.
 
-<center>
 _Distribution of Scores by K; Individual_
 ![](all_network_dists.png)
-</center>
 
 In this more in-depth view of the scoring methods by K value, we can see the mean trends discussed earlier but in more detail. In terms of RPrec score, we can watch the distribution shift right showing the improved RPrec score as K increase, but then shift left again once K=100. We see a similar result in the NDCG scores. Interestingly we can see in the click scores that there are two main 'bumps' in the distribution. The first is around 1, showing that most times there is relevant song on the first page or in the first couple pages. Then there is another bump around 51 (the max value allowed per the SysRec evaluation specs), which shows that sometimes the reccomendations contain none of the expected songs. As K increases, however, we can see that the bump at 1 grows higher and higher, while the bump at around 51 shrinks showing the overal improvement in the predictions (based on click score) as K increases.
 
