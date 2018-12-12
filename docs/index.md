@@ -32,7 +32,8 @@ As for the content of the playlists then, we inspected the numbers of songs and 
 
 ![Songs](songcounts.png) ![art](artcount.png)
 
-Another facet of the dataset that we explored was the average length of the playlists. This distribution was also incredibly right skewed. The median playlist was of length 49 tracks, with the mean being around 66 tracks. As for the artists, the median was 30 with a mean of 38 artists per playlist. This shows that there is a clear tendency for artists to be grouped in playlists with other songs from the same artist. It is also likely that longer playlists include more repeat artists because of what appears to be less skew in the
+Another facet of the dataset that we explored was the average length of the playlists. This distribution was also incredibly right skewed. The median playlist was of length 49 tracks, with the mean being around 66 tracks. As for the artists, the median was 30 with a mean of 38 artists per playlist. This shows that there is a clear tendency for artists to be grouped in playlists with other songs from the same artist. It is also likely that longer playlists include more repeat artists because of what appears to be less right skew.
+
 
 ![art](playlistlen.png) ![art](artdist.png)
 
@@ -54,14 +55,12 @@ Our last model, based on a Markov Chain random walk, was inspired by the descrip
 ## Modeling Approach:
 _What was your baseline model for comparison? What further models did you implement? Description of your implementations beyond the baseline model. Briefly summarize any changes in your project goals or implementation plans you have made along the way. These changes are a natural part of any project, even those that seem the most straightforward at the beginning. The story you tell about how you arrived at your results can powerfully illustrate your process._
 
-The
-Are we saying the baseline model is the collaborative filtering as thats the go-to in recommendation systems?
+Link to a demonstration of our models working in real time: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/)
 
-Then I think Nick, if you could explain your model here that would be huge.
+#### 1. K-Nearest-Neighbors Based on Playlist
 
-Link to model demonstration: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/)
 
-#### 1. Clustering and KNN based on Audio Features  
+#### 2. Clustering and KNN based on Audio Features  
 **Motivation:** Our motivation for this model was to be very much a baseline for the other models. Intuitively, we wanted to test how well the audio features could predict how close songs were, independent of data from the MPD. We thought that we might be able to achieve some combination of clustering and nearest neighbors modeling to do better than random chance (which almost never retrieves relevant songs).
 
 **Implementation:** As we implemented it, our model predicts in two steps. First, it clusters all songs it has seen before, then for each input of seed songs (some $K \in [1,5,10,25,50]$), finds the 'closest' songs to those, in some way. The class we implemented has three different predict methods, namely `predict`, `predict2`, and `predict3`. They all use the Spotify API audio features to cluster and make predictions, relatively ignoring the MPD aside as input and output uris. The first simply calculates the most populous cluster among the input data, then randomly samples 500 songs from that cluster. The second tries to match the distribution of input songs more closely, outputting the number of songs in the input per cluster scaled up for a total of 500. Finally, the last method uses the audio features even more, calculating the 'distance' of every song in the same cluster to the 'average' of the input songs, outputting the 500 songs closest to the average, in order. Overall, these methods do fairly poorly at matching the held out songs, only retrieving relevant songs fairly rarely. The R-precision of these methods is in the range of 0.005-0.011. The pseudocode for `predict3` goes like follows (for a single input playlist):
@@ -75,7 +74,39 @@ Link to model demonstration: [Our Model Demonstration](http://ec2-3-16-137-40.us
 4. Return the 500 'closest' songs in the cluster
 ```
 
-<!--<iframe src="http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/" width="100%" height="800"> </iframe> -->
+#### 3. Markov-Chain/Network Based Approach
+
+##### Motivation:
+
+Our network based approach was based around the idea that tracks that people have put together into playlists in the
+past will likely be put together into playlists in the future. Thus we wanted to create a probabalistic method to
+represent how "connected" tracks were to one another. In this sense, the basic approach of this model is to reccomend
+songs based on how likely they are to belong with the seed songs.
+
+##### Implementation:
+
+This model is implemented as a weighted undirected graph. Essentially we can view the creation of the larger network as the summation of the smaller graphs created by each playlist.
+
+![](network_example_diagram.png)
+
+After creating this network, we then normalize the edge weights by the total out degree of each song node to give a probability distribution for taking any given edge when starting at a node.
+
+Now that we have a network that shows the relation of songs to one another, we need to define a way to get predictions from a current playlist/list of seed songs. Our current method in pseudocode is:
+
+```
+all_samples = ()
+for song in seed_songs:
+	sample 4000 songs, by taking a weighted 1-step random walk from the current song
+	add the samples to all_samples
+
+return the 500 most common songs in all_samples in decreasing order of occurrences
+```
+
+Because our model will return songs that share the most playlists with the seed songs because the random walks are weighted, this model now effectively implements the problem stated in its motivation, that is to return the songs that are most likely to have shared a playlist with the current songs in the past.
+
+
+#### 4. Collaborative Filtering
+
 
 ## Results:
 _Describe the results and emphasize the most important results. Did you have to reconsider some of the original assumptions?_
@@ -89,6 +120,62 @@ We decided to evaluate our models based on the same metrics used in the Spotify 
 * Recommended Songs Clicks (RSC): This measures how many "clicks" a Spotify user would need to find the first relevant song in the recommendations (the first song actually in the rest of the playlist $G$), where Spotify displays recommended songs in groups of 10. Therefore it's simply finding the first relevant song and returning its position in the list divided by 10 and truncated.
 
 The more formal mathematical description of these metrics can again be found in the [contest rules](https://recsys-challenge.spotify.com/rules) for Spotify's challenge, while the code implementing them is in our notebook.
+
+#### 1. K-Nearest-Neighbors Based on Playlist
+
+#### 2. K-Nearest-Neighbors Clustering on Audio Features
+
+#### 3. Markov-Chain/Network Based Approach
+
+For a model based solely on choosing like-tracks in a probabalistic way, the network based approach performs impressively. While we did not have access to the official spotify test datasets, our tests suggest that our network based model is competitive with other submissions to the Spotify RecSys competition. The average scores of our model based on the three scoring metrics described earlier are as follows:
+
+<center>
+_Mean Scores by K_
+
+| K       | Mean RPrec  | Mean NDCG Score | Mean Clicks Score |
+| :-----: |:---:| :----:| :----:|
+| 1     | 0.1708 | 0.1478 | 8.5900 |
+| 5     | 0.2817 | 0.2356 | 3.2146 |
+| 10    | 0.3124 | 0.2567 | 2.8128 |
+| 25    | 0.3246 | 0.2665 | 2.8642 |
+| 100   | 0.2811 | 0.2250 | 2.2162 |
+
+_Mean Scores by K_
+![](network_means_vs_k.png)
+</center>
+
+Above we can start to see trends in the various evaluation methods. It's important to note that because of constraints on local processing power, the network does not necessarily have nodes for all of the test songs which is hurting performance, but a natural drawback of the Markov-chain approach: namely the model itself is quite large. We counter this by randomly sampling songs from the network with equal weight whenever a seed song is not in the network.
+
+Looking at the performance of the network approach based on the three scoring systems, we can see that the model seems to perform best for the $RPrec$ score and NCDG score methods using K=25 seed songs, while the mean clicks required to find a relevant song is best with K=100 seed songs.
+
+Furthermore, while we do not have access to the official test sets used by Spotify, we can start to see the benefits and drawbacks of the Markov-chain based model. The Markov-chain based model seems to perform best (relative to the other metrics) on the RPrec score. The best performing Spotify challenge contestant had a score of RPrec = .224 on the official test set, whereas, depending on the K value, our model had a mean RPrec in {0.17,0.28, 0.32, 0.28}. This should of course be taken with a grain of salt as our model most likely would not have had the best performance in the challenge, but does signal that it is a reasonably good approach.
+
+Moving on to mean NCDG score, which takes into account the actual ranking of importance of the predictions into account, our model falls much closer to the middle of the pack in the RecSys leaderboards (again, this is a tough comparison given that we don't have the test set used in the challenge). With scores in the low 0.2 range, (roughly ~60th/110 in the actual challenge) we can start to see the drawbacks of the Markov model.
+
+Lastly our mean Click Score again places the model in the relative middle of the pack for the RecSys leaderboards. Where exactly is unclear because there is no info on the test data and what the distribution of K was, however, it seems that the Markov-chain model can hold its own.
+
+But why does the Markov-chain model apparently do so much better with the RPrec scoring method than the others? At its base, this makes sense because the whole idea of the model is that tracks that people put together on their own will likely be put together by people again. The one step random walk should do a fairly good job of getting the most likely songs as a set, but the ranking system of appearances in the sample set does not seem to perform as well as the other Spotify challenge methods for ensuring the most relevant songs are given first. This would suggest a need to work on the weighting system used by the algorithm. The mean Clicks Score also shows the issues as with the NCDG score, namely the member songs are not always ranked as the most relevant.
+
+Moving on though, let's take a closer look at the score distributions mased on K. First the below figure gives a quick glance of where the scores are in general.
+
+<center>
+_Distribution of Scores by K; Summary_
+![](overlayed_network_dists.png)
+</center>
+
+The above graph, however, only gives us a basic idea of what's going on. There are two many lines to allow us to analyze the behavior at each K value. Thus, let's take a closer look at the distributions for each score at each K value.
+
+<center>
+_Distribution of Scores by K; Individual_
+![](all_network_dists.png)
+</center>
+
+In this more in-depth view of the scoring methods by K value, we can see the mean trends discussed earlier but in more detail. In terms of RPrec score, we can watch the distribution shift right showing the improved RPrec score as K increase, but then shift left again once K=100. We see a similar result in the NDCG scores. Interestingly we can see in the click scores that there are two main 'bumps' in the distribution. The first is around 1, showing that most times there is relevant song on the first page or in the first couple pages. Then there is another bump around 51 (the max value allowed per the SysRec evaluation specs), which shows that sometimes the reccomendations contain none of the expected songs. As K increases, however, we can see that the bump at 1 grows higher and higher, while the bump at around 51 shrinks showing the overal improvement in the predictions (based on click score) as K increases.
+
+
+
+
+#### 4. Collaborative Filtering
 
 
 ## Conclusions and Summary:
