@@ -19,8 +19,7 @@ class App extends Component {
   }
 
   update_predictions() {
-    // Fetch predictions from network
-    fetch('http://127.0.0.1:8000/network-most-likely', {
+    fetch('http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:8000/network-most-likely', {
       method: 'post',
       headers: {
             "Content-Type": "application/json; charset=utf-8",
