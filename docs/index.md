@@ -125,6 +125,22 @@ The more formal mathematical description of these metrics can again be found in 
 
 #### 2. K-Nearest-Neighbors Clustering on Audio Features
 
+Because this model is meant to be very much a baseline, these metrics confirm our assumption that it does only a little better than random chance. While it regularly finds some songs (generally no more than 1 or 2) from the held out songs, the random chance model we tested nearly never retrieved a relevant song. We thought this would be a good baseline as well as giving us a chance to apply some models we learned in class, whereas the two better models we implemented were extensions that we didn't cover at all this semester. This results of the metrics for different values of K are below.
+
+_Mean Scores by K_
+
+| K       | Mean RPrec  | Mean NDCG Score | Mean Clicks Score |
+| :-----: |:---:| :----:| :----:|
+|  1  |   0.0058   |   0.0039  |   40.2597   |
+|  5  |   0.0068   |   0.0046  |   38.3366   |
+|  10 |   0.0075   |   0.005   |   37.3538   |
+|  25 |   0.0084   |   0.0055  |   37.0864   |
+| 100 |   0.0093   |   0.0061  |   34.1441   |
+
+_Mean Scores by K_
+
+![](cluster_eval_graphs.png)
+
 #### 3. Markov-Chain/Network Based Approach
 
 For a model based solely on choosing like-tracks in a probabalistic way, the network based approach performs impressively. While we did not have access to the official spotify test datasets, our tests suggest that our network based model is competitive with other submissions to the Spotify RecSys competition. The average scores of our model based on the three scoring metrics described earlier are as follows:
