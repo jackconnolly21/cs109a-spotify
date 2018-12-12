@@ -8,12 +8,6 @@ title: Group 55 - Music Recommender
 ## Overview:
 _Provide an overview of the project. It is important that you include a general context for the project as well as an overall description of the project. Any introductory information that’s specific to the project should also be included._
 
-$a^2 + b^2 = c^2$
-
-$$a^2 + b^2 = c^2$$
-
-\[a^2 + b^2 = c^2\]
-
 Streaming services like Spotify, Pandora, and Apple Music have radically reshaped the music industry in the last decade. The vast libraries of music that these sources have available to their users is unlike anything before it. Like the internet more broadly, the curse of so much content ultimately becomes finding the things that truly matter to users. The fundamental challenge of content discovery presents an open ended challenge to these streaming platforms of presenting users with the best recommendations. Successfully filtering and curating music for listeners is ultimately a very key differentiator between streaming platforms. Good or bad recommendations can spell the success or failure of services in acquiring and retaining users.
 
 Because songs are relatively short and listened to in succession of one another, the primary unit of recommendation that we deal with is that of the ___playlist___. Playlists are a series of songs in particular succession that are grouped to be played at the same time. Playlists can be characterized by a mood or a genre that people look to use enhance the spirit of a moment in their lives. This is why is the essential unit of recommendation for music. Being able to produce coherent, or even good, playlists has the potential to greatly improve our music listening experiences.
@@ -39,28 +33,28 @@ In the spirit of the assignment, and the spotify challenge more generally, the d
 
 As for the content of the playlists then, we inspected the numbers of songs and artists that occur and the frequencies with which they occur in the playlists. In these frequencies, there is an incredible skew reflecting how hard it is to be popular in music. There are a few songs that are incredibly popular and then the vast majority of songs and artists appear only once in the sample.
 
-![Songs](songcounts.png) ![art](artcount.png)
+![Songs](images/songcounts.png) ![art](images/artcount.png)
 
 The distribution of the top 20 artists over the first portion of the dataset is visualized below as a donut plot:
 
-![Top Artists](artist_donut.png)
+![Top Artists](images/artist_donut.png)
 
 Another facet of the dataset that we explored was the average length of the playlists. This distribution was also incredibly right skewed. The median playlist was of length 49 tracks, with the mean being around 66 tracks. As for the artists, the median was 30 with a mean of 38 artists per playlist. This shows that there is a clear tendency for artists to be grouped in playlists with other songs from the same artist. It is also likely that longer playlists include more repeat artists because of what appears to be less right skew.
 
 
-![art](playlistlen.png) ![art](artdist.png)
+![art](images/playlistlen.png) ![art](images/artdist.png)
 
 To better understand the situation, however, we also explored the in depth audio feature data that is accessible for individual songs from the Spotify API. The data on songs from the API rates songs on particular features such as "energy", "danceability", or "valence" (a measure of how positive or negative the emotions in the songs are). Ultimately the models that we built using these features as a primary predictor of the next song were not at all good when it came down to evaluation, mainly because they were fairly simple models and didn't take into account at all the structure of the playlist data. However, we did find some interesting things when exploring the data.
 
 The scatter matrix below explores relationships between a subset of the audio features, namely liveness, energy, loudness, and tempo. We chose to explore these more closely, as they seemed intuitively to be more closely interdependent on one another.
 
-![Scatter Matrix](scatter_matrix.png)
+![Scatter Matrix](images/scatter_matrix.png)
 
 This scatter matrix is mainly of interest because of the relationship between energy and loudness. The two features seem to be relatively positively correlated, so we will need to be careful of collinearity when we fit models with these predictors. As for the other predictors, we can see that we have a relatively good distribution across the range, which is to be expected because we have scaled this data to have mean of 0 and standard deviation of 1. This should make it work better when we apply distance based techniques like KMeans clustering and KNN to the data.
 
 Further, we also looked directly at the distribution of each predictor below:
 
-![KDE Plot](kdeplot.png)
+![KDE Plot](images/kdeplot.png)
 
 These plots are of great interest to us, as they display how our Spotify API features are distributed. This is super important when we apply these features to KMeans and KNN, as outliers or wide spreads could possibly sway the distance metrics inordinately. However, since we have already scaled our data, most of these plots look relatively normal. There are some features (like valence and tempo) that look much more normal, while others (like loudness and liveness) that are skewed either left or right. Additionally, time signature, mode, and key appear to be discrete values, so we may have to handle those carefully.
 
@@ -111,7 +105,7 @@ songs based on how likely they are to belong with the seed songs.
 
 This model is implemented as a weighted undirected graph. Essentially we can view the creation of the larger network as the summation of the smaller graphs created by each playlist.
 
-![](network_example_diagram.png)
+![](images/network_example_diagram.png)
 
 After creating this network, we then normalize the edge weights by the total out degree of each song node to give a probability distribution for taking any given edge when starting at a node.
 
@@ -163,7 +157,7 @@ _Mean Scores by K_
 
 _Mean Scores by K_
 
-![](cluster_eval_graphs.png)
+![](images/cluster_eval_graphs.png)
 
 #### 3. Markov-Chain/Network Based Approach
 
@@ -182,7 +176,7 @@ _Mean Scores by K_
 
 _Mean Scores by K_
 
-![](network_means_vs_k.png)
+![](images/network_means_vs_k.png)
 
 
 Above we can start to see trends in the various evaluation methods. It's important to note that because of constraints on local processing power, the network does not necessarily have nodes for all of the test songs which is hurting performance, but a natural drawback of the Markov-chain approach: namely the model itself is quite large. We counter this by randomly sampling songs from the network with equal weight whenever a seed song is not in the network.
@@ -200,12 +194,12 @@ But why does the Markov-chain model apparently do so much better with the RPrec 
 Moving on though, let's take a closer look at the score distributions mased on K. First the below figure gives a quick glance of where the scores are in general.
 
 _Distribution of Scores by K; Summary_
-![](overlayed_network_dists.png)
+![](images/overlayed_network_dists.png)
 
 The above graph, however, only gives us a basic idea of what's going on. There are two many lines to allow us to analyze the behavior at each K value. Thus, let's take a closer look at the distributions for each score at each K value.
 
 _Distribution of Scores by K; Individual_
-![](all_network_dists.png)
+![](images/all_network_dists.png)
 
 In this more in-depth view of the scoring methods by K value, we can see the mean trends discussed earlier but in more detail. In terms of RPrec score, we can watch the distribution shift right showing the improved RPrec score as K increase, but then shift left again once K=100. We see a similar result in the NDCG scores. Interestingly we can see in the click scores that there are two main 'bumps' in the distribution. The first is around 1, showing that most times there is relevant song on the first page or in the first couple pages. Then there is another bump around 51 (the max value allowed per the SysRec evaluation specs), which shows that sometimes the reccomendations contain none of the expected songs. As K increases, however, we can see that the bump at 1 grows higher and higher, while the bump at around 51 shrinks showing the overal improvement in the predictions (based on click score) as K increases.
 
