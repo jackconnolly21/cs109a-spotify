@@ -4,7 +4,7 @@ import sys
 import pickle 
 
 
-NUMBER_OF_FILES_TO_USE = 5
+NUMBER_OF_FILES_TO_USE = 15
 
 # After running into issues trying to pickle large objects (ie our graph), 
 # It turns out that there's an issue in the pickle implementation. This stack overflow function 
@@ -67,7 +67,14 @@ for i in range(NUMBER_OF_FILES_TO_USE) :
 
 # clean the network -> counts per song (normalized)
 print("Cleaning up the Network a bit")
+i = 0.
+total = len(network)
 for uri in network : 
+    
+    if not i % 10000 : 
+        print (i / total)
+    i += 1.0
+
     unique, counts = np.unique(network[uri], return_counts=True)
     network[uri] = {'songs' : unique, 'counts': counts / np.sum(counts)}
 
