@@ -10,3 +10,5 @@ mpd.v1/
 
 *.pickle
 *db.sqlite3
+
+*.pem

@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from .views import * 
+from .views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^network-most-likely', network_most_likely),
-    # url(r'^song-to-info', song_name_to_info)
+    url(r'^cluster-most-likely', cluster_most_likely)
 ]
