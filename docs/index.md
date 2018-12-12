@@ -1,11 +1,11 @@
 # CS109a Final Project: *Music Recommender System*
-##### A project by Nicholas Kochanek, John Connelly, Christopher Jarrett, and Andrew Soldini	
+##### A project by Nicholas Kochanek, Jack Connolly, Christopher Jarrett, and Andrew Soldini
 
-## Overview: 
+## Overview:
 _Provide an overview of the project. It is important that you include a general context for the project as well as an overall description of the project. Any introductory information that’s specific to the project should also be included._
 
 
-Streaming services like Spotify, Pandora, and Apple Music have radically reshaped the music industry in the last decade. The vast libraries of music that these sources have available to their users is unlike anything before it. Like the internet more broadly, the curse of so much content ultimately becomes finding the things that truly matter to users. The fundamental challenge of content discovery presents an open ended challenge to these streaming platforms of presenting users with the best recommendations. Successfully filtering and curating music for listeners is ultimately a very key differentiator between streaming platforms. Good or bad recommendations can spell the success or failure of services in acquiring and retaining users. 
+Streaming services like Spotify, Pandora, and Apple Music have radically reshaped the music industry in the last decade. The vast libraries of music that these sources have available to their users is unlike anything before it. Like the internet more broadly, the curse of so much content ultimately becomes finding the things that truly matter to users. The fundamental challenge of content discovery presents an open ended challenge to these streaming platforms of presenting users with the best recommendations. Successfully filtering and curating music for listeners is ultimately a very key differentiator between streaming platforms. Good or bad recommendations can spell the success or failure of services in acquiring and retaining users.
 
 Because songs are relatively short and listened to in succession of one another, the primary unit of recommendation that we deal with is that of the ___playlist___. Playlists are a series of songs in particular succession that are grouped to be played at the same time. Playlists can be characterized by a mood or a genre that people look to use enhance the spirit of a moment in their lives. This is why is the essential unit of recommendation for music. Being able to produce coherent, or even good, playlists has the potential to greatly improve our music listening experiences.
 
@@ -13,41 +13,64 @@ To this end, Spotify has been investing heavily in their data science in order t
 
 In this project, we set out to accomplish many of the goals of the Spotify Challenge in our own playlist recommendations. We pursued various common methods of recommendation systems along with methods of our own devising in tackling the playlist recommendation challenge.
 
-## Motivation: 
+## Motivation:
 _Introduce the project motivation both as a whole as well as motivations for important defining aspects of your work. For example were there any visualization or UI primitives that informed your work?_
 
-The motivation behind this project as a whole stems from the incredible business value that companies draw from making good recommendations to users. Our personal motive comes from our own experiences as users of music streaming services. We have a personal interest and value in effective recommendation algorithms. The ability to generate good playlists is something that both us and our friends are very interested in being able to use in our daily lives. We all have, at one point or another, worked hard to compile a high quality playlist for our friends' and our own enjoyments. It is therefore something that touches us on an engaging, tangible level. 
+The motivation behind this project as a whole stems from the incredible business value that companies draw from making good recommendations to users. Our personal motive comes from our own experiences as users of music streaming services. We have a personal interest and value in effective recommendation algorithms. The ability to generate good playlists is something that both us and our friends are very interested in being able to use in our daily lives. We all have, at one point or another, worked hard to compile a high quality playlist for our friends' and our own enjoyments. It is therefore something that touches us on an engaging, tangible level.
 
 As aspiring data scientists, these services are also treasure troves of data that we can use to make interesting insights on. The digital nature of Spotify's libraries and interfaces means that every part of the user experience can be turned into high quality data. The sheer scale of this data is mind-boggling, and therefore interesting to work on. Throughout this project, the amount of data was also a somewhat limiting factor in our analysis due to our limited computing resources available.
 
 As for the motivation behind the techniques that we employed, we wanted to stay true to the Spotify Challenge, focusing our generation of new playlists primarily based on actual user-generated playlists. Because of this, our models were ones that could see the data as a graphical web of interactions between songs that appear together in these user generated playlists. We also believed that our model's method and performance can be well demonstrated through the use of an interactive React web app that we have hosted and linked to below. We have really worked to bring this challenge to life.
 
 
-## Description of Data and EDA: 
+## Description of Data and EDA:
 _What data are you dealing with? What methods have you used to explore the data (incl. initial explorations, models, data cleansing and reconciliation, etc)? What insights did you gain? How did those methods influence your work?_
 
-In the spirit of the assignment, and the spotify challenge more generally, the dataset that we primarily worked with was the _"Million Playlist Dataset"_. This dataset has about one million playlists that have been generated by users. The idea behind using this as the primary method for the recommendation system is that the best way to create good playlists is to view playlists that people have made. In using this dataset, we are actually content agnostic. That is, the recommendations have nothing to do with the actual content of the song, just how they are placed with other songs. 
+In the spirit of the assignment, and the spotify challenge more generally, the dataset that we primarily worked with was the _"Million Playlist Dataset"_. This dataset has about one million playlists that have been generated by users. The idea behind using this as the primary method for the recommendation system is that the best way to create good playlists is to view playlists that people have made. In using this dataset, we are actually content agnostic. That is, the recommendations have nothing to do with the actual content of the song, just how they are placed with other songs.
 
-__Can anyone elaborate on EDA of the Million Playlist Data?__
+As for the content of the playlists then, we inspected the numbers of songs and artists that occur and the frequencies with which they occur in the playlists. In these frequencies, there is an incredible skew reflecting how hard it is to be popular in music. There are a few songs that are incredibly popular and then the vast majority of songs and artists appear only once in the sample.
 
-To better understand the situation, however, we also explored the in depth audio feature data that is accessible for individual songs from the Spotify API. 
- 
+![Songs](songcounts.png) ![art](artcount.png)
 
-^This scatter should probably be removed? I put it in for convenience and to see how it looks online. Generally, however, do we have good visualizations to put in?
+Another facet of the dataset that we explored was the average length of the playlists. This distribution was also incredibly right skewed. The median playlist was of length 49 tracks, with the mean being around 66 tracks. As for the artists, the median was 30 with a mean of 38 artists per playlist. This shows that there is a clear tendency for artists to be grouped in playlists with other songs from the same artist. It is also likely that longer playlists include more repeat artists because of what appears to be less right skew. 
 
-## Literature Review/Related Work: 
+
+![art](playlistlen.png) ![art](artdist.png)
+
+To better understand the situation, however, we also explored the in depth audio feature data that is accessible for individual songs from the Spotify API. The data on songs from the API rates songs on particular features such as "energy", "danceability", or "valence" (a measure of how positive or negative the emotions in the songs are). Ultimately the models that we built using these features as a primary predictor of the next song was not at all good when it came down to evaluation.
+
+
+
+## Literature Review/Related Work:
 _This can include noting any key papers, texts, other software sources, talks or websites that you have used to develop your modeling approach and/or that informed your demo/site._
 
-The primary literature review for this project is the review of the [paper resulting from the Spotify Challenge](https://arxiv.org/pdf/1810.01520.pdf). In this paper, there is a discussion of the evaluation methods and the most successful models within the competition. 
+The primary literature review for this project is the review of the [paper resulting from the Spotify Challenge](https://arxiv.org/pdf/1810.01520.pdf). In this paper, there is a discussion of the evaluation methods and the most successful models within the competition.
 
-## Modeling Approach: 
+The statistics then that we use are
+
+The things about the model that we then know
+
+## Modeling Approach:
 _What was your baseline model for comparison? What further models did you implement? Description of your implementations beyond the baseline model. Briefly summarize any changes in your project goals or implementation plans you have made along the way. These changes are a natural part of any project, even those that seem the most straightforward at the beginning. The story you tell about how you arrived at your results can powerfully illustrate your process._
 
 Link to a demonstration of our models working in real time: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/)
 
 #### 1. K-Nearest-Neighbors Based on Playlist
 
-#### 2. K-Nearest-Neighbors Clustering on Audio Features
+
+#### 2. Clustering and KNN based on Audio Features  
+**Motivation:** Our motivation for this model was to be very much a baseline for the other models. Intuitively, we wanted to test how well the audio features could predict how close songs were, independent of data from the MPD. We thought that we might be able to achieve some combination of clustering and nearest neighbors modeling to do better than random chance (which almost never retrieves relevant songs).
+
+**Implementation:** As we implemented it, our model predicts in two steps. First, it clusters all songs it has seen before, then for each input of seed songs (some $K \in [1,5,10,25,50]$), finds the 'closest' songs to those, in some way. The class we implemented has three different predict methods, namely `predict`, `predict2`, and `predict3`. They all use the Spotify API audio features to cluster and make predictions, relatively ignoring the MPD aside as input and output uris. The first simply calculates the most populous cluster among the input data, then randomly samples 500 songs from that cluster. The second tries to match the distribution of input songs more closely, outputting the number of songs in the input per cluster scaled up for a total of 500. Finally, the last method uses the audio features even more, calculating the 'distance' of every song in the same cluster to the 'average' of the input songs, outputting the 500 songs closest to the average, in order. Overall, these methods do fairly poorly at matching the held out songs, only retrieving relevant songs fairly rarely. The R-precision of these methods is in the range of 0.005-0.011. The pseudocode for `predict3` goes like follows (for a single input playlist):
+
+```
+1. Find the max_cluster in the input
+
+2. Calculate the average features for the input
+3. Calculate the distance between average and each song
+
+4. Return the 500 'closest' songs in the cluster
+```
 
 #### 3. Markov-Chain/Network Based Approach
 
@@ -82,7 +105,8 @@ Because our model will return songs that share the most playlists with the seed 
 
 #### 4. Collaborative Filtering
 
-## Results: 
+
+## Results:
 _Describe the results and emphasize the most important results. Did you have to reconsider some of the original assumptions?_
 
 #### 1. K-Nearest-Neighbors Based on Playlist
@@ -142,14 +166,14 @@ In this more in-depth view of the scoring methods by K value, we can see the mea
 #### 4. Collaborative Filtering
 
 
-## Conclusions and Summary: 
+## Conclusions and Summary:
 _Review what was discussed in the Overview and Motivation sections (don’t repeat them word-for-word!). Discuss your contributions including the successes and areas for improvement._
 
-## Future work: 
+Overall, we have seen that the filtering and network models perform the best, significantly improving over the baseline models using nearest neighbor techniques. Our final models were comparable with some of the top models in the RecSys challenge, so we are very satisfied with our results. If we had more time and computing power, we would have liked to scale both of those models up larger, as they were both limited in terms of their size (the network was trained on about 14000 playlists and ended up being about 7GB while filtering was only able to handle about HOW MANY PLAYLISTS). Ideally, we would be able to utilize sklearn's suppoer for sparse matrices to scale up filtering, but we weren't able to finalize that.
+
+Music recommendation is, in general, a challenging problem when we have millions of diverse songs to choose from. More complex techniques like deep RNNs and autoencoders seemed attractive at the beginning of the project, but ultimately weren't feasible for us to complete. This forced us to adapt and implement the fairly different models seen here. Overall, we feel confident in our model's ability to find relevant songs to continue and put together a great playlist.
+
+## Future work:
 _Discuss extensions to and new directions for your work. What do you think would be interesting to pursue next? Are there any ideas worth exploring that you didn’t get a chance to explore?_
 
 Sparse matrices for collaborative filtering?
-
-
-
-
