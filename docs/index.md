@@ -45,9 +45,11 @@ _This can include noting any key papers, texts, other software sources, talks or
 
 The primary literature review for this project is the review of the [paper resulting from the Spotify Challenge](https://arxiv.org/pdf/1810.01520.pdf). In this paper, there is a discussion of the evaluation methods and the most successful models within the competition.
 
-The statistics then that we use are
+We first of all used this in order to get a sort of benchmark for how well the top performing models do on this problem, so we could know how well we are doing when comparing our own models. They note that most of the top performing models utilized some kind of two stage architecture, where the first stage "retrieves a small set of tracks (compared to the total number of tracks in the dataset), while the second stage focuses on re-scoring or re-ranking the output of the first stage model with the goal of accuracy improvement." This means that the first stage favors high recall (getting most of the relevant songs, but possibly more), while the second stage prefers high precision (getting only highly relevant songs). Also, matrix factorization was heavily used, leading us to be interested in trying out collaborative filtering, which mainly using matrix factorization. Other teams also used neural networks and other techniques to learn word embeddings in order to extract useful information from the playlist titles and other natural language features. Because the paper notes that many of the models weren't able to significantly improve using the title of the playlist, we chose to ignore that feature. Also, the creative track curiously had lower scores than the main track, even though it had access to more data sources. They attributed this to the large space of possible songs and data and thought the model wasn't able to properly learn everything, so again our two main models just focus on the Million Playlist Dataset.
 
-The things about the model that we then know
+For our collaborative filtering approach, we researched previous implementations and attempts at this, as it has been a common approach in the past for music recommendations. [This paper](https://arxiv.org/abs/1209.3286v1) used filtering with user-based similarity in order to recommend songs to users (as opposed to continuing playlists). It provided a good basis from which to start implementing our own version of filtering.
+
+Our last model, based on a Markov Chain random walk, was inspired by the description of the web as a random walk (as noted in many CS courses). In our research, we found that Markov Chains had sometimes been applied to give recommendations for webpages to visit (even in tandem with collaborative filtering), but didn't find anything as it related to music recommendation/playlist continuation. In [this paper](https://cdn.uclouvain.be/public/Exports%20reddot/iag/documents/WP123_Fouss.pdf), the authors discuss an application Markov Chains to recommendations on the web. We used this as guidance when implementing our own system.
 
 ## Modeling Approach:
 _What was your baseline model for comparison? What further models did you implement? Description of your implementations beyond the baseline model. Briefly summarize any changes in your project goals or implementation plans you have made along the way. These changes are a natural part of any project, even those that seem the most straightforward at the beginning. The story you tell about how you arrived at your results can powerfully illustrate your process._
@@ -78,6 +80,15 @@ Link to model demonstration: [Our Model Demonstration](http://ec2-3-16-137-40.us
 ## Results:
 _Describe the results and emphasize the most important results. Did you have to reconsider some of the original assumptions?_
 
+We decided to evaluate our models based on the same metrics used in the Spotify RecSys [contest rules](https://recsys-challenge.spotify.com/rules), namely R-Precision (RPrec), Normalized Discounted Cumulative Gain (NDCG), and Recommended Song Clicks (RSC). In the following definitions, $G$ is the set of ground truth tracks representing the held out songs from each playlist and $R$ is the ordered list of recommended songs returned by the recommendation system.
+
+* R-Precision: The metric counts "number of retrieved relevant tracks divided by the number of known relevant tracks," rewarding the total number of retrieved relevant tracks, regardless of order.
+
+* Normalized Discounted Cumulative Gain (NDCG): This metric takes into account the order of the returned songs, rewarding relevant songs placed higher in the returned list. It is calculated as Discounted Cumulative Gain (DCG), divided by the Ideal Discounted Cumulative Gain (IDCG), where the returned songs are ordered perfectly.
+
+* Recommended Songs Clicks (RSC): This measures how many "clicks" a Spotify user would need to find the first relevant song in the recommendations (the first song actually in the rest of the playlist $G$), where Spotify displays recommended songs in groups of 10. Therefore it's simply finding the first relevant song and returning its position in the list divided by 10 and truncated.
+
+The more formal mathematical description of these metrics can again be found in the [contest rules](https://recsys-challenge.spotify.com/rules) for Spotify's challenge, while the code implementing them is in our notebook.
 
 
 ## Conclusions and Summary:
