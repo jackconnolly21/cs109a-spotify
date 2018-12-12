@@ -1,3 +1,7 @@
+---
+title: Group 55 - Music Recommender
+---
+
 # CS109a Final Project: *Music Recommender System*
 ##### A project by Nicholas Kochanek, Jack Connolly, Christopher Jarrett, and Andrew Soldini
 
