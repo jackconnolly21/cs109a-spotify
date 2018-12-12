@@ -15,17 +15,18 @@ class SuggestionsTable extends Component {
     return (
     	<Paper>
         <Toolbar>
-          <Typography variant="h6" id="tableTitle">Suggested Song Additions: {this.props.name}</Typography> 
-          <div style={{flexGrow: 1}}></div> 
-          <Button variant="contained" color="secondary" onClick={() => this.props.refresh()}>Refresh</Button> 
-        </Toolbar>   
+          <Typography variant="h6" id="tableTitle">Suggested Song Additions: {this.props.name}</Typography>
+          <div style={{flexGrow: 1}}></div>
+
+          <Button variant="contained" color="secondary" onClick={() => this.props.refresh()}>Refresh</Button>
+        </Toolbar>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Song </TableCell>
               <TableCell>Artist</TableCell>
               <TableCell>Album</TableCell>
-              <TableCell>Score</TableCell>
+              <TableCell>{this.props.score_name}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -37,9 +38,9 @@ class SuggestionsTable extends Component {
                 <TableCell>{row.artist_name}</TableCell>
                 <TableCell>{row.album_name}</TableCell>
                 <TableCell>{row.score}</TableCell>
-                <TableCell> 
-                    <Button 
-                    variant="contained" 
+                <TableCell>
+                    <Button
+                    variant="contained"
                     color="primary"
                     onClick={() => this.props.handler(row)}
                     >
@@ -50,8 +51,8 @@ class SuggestionsTable extends Component {
             );
           })}
         </TableBody>
-        </Table> 
-		  </Paper> 
+        </Table>
+		  </Paper>
     	);
   }
 }
