@@ -118,6 +118,7 @@ _Describe the results and emphasize the most important results. Did you have to 
 For a model based solely on choosing like-tracks in a probabalistic way, the network based approach performs impressively. While we did not have access to the official spotify test datasets, our tests suggest that our network based model is competitive with other submissions to the Spotify RecSys competition. The average scores of our model based on the three scoring metrics described earlier are as follows: 
 
 <center>
+
 _Mean Scores by K_
 
 | K       | Mean RPrec  | Mean NDCG Score | Mean Clicks Score |
@@ -129,7 +130,9 @@ _Mean Scores by K_
 | 100   | 0.2811 | 0.2250 | 2.2162 |
 
 _Mean Scores by K_
+
 ![](network_means_vs_k.png)
+
 </center> 
 
 Above we can start to see trends in the various evaluation methods. It's important to note that because of constraints on local processing power, the network does not necessarily have nodes for all of the test songs which is hurting performance, but a natural drawback of the Markov-chain approach: namely the model itself is quite large. We counter this by randomly sampling songs from the network with equal weight whenever a seed song is not in the network. 
