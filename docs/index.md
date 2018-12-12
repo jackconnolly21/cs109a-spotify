@@ -9,7 +9,7 @@ Streaming services like Spotify, Pandora, and Apple Music have radically reshape
 
 Because songs are relatively short and listened to in succession of one another, the primary unit of recommendation that we deal with is that of the ___playlist___. Playlists are a series of songs in particular succession that are grouped to be played at the same time. Playlists can be characterized by a mood or a genre that people look to use enhance the spirit of a moment in their lives. This is why is the essential unit of recommendation for music. Being able to produce coherent, or even good, playlists has the potential to greatly improve our music listening experiences.
 
-To this end, Spotify has been investing heavily in their data science in order to improve recommendations to users. One specific effort that Spotify launched is _[Spotify RecSys Challenge 2018](https://recsys-challenge.spotify.com/)_. In this challenge, entrants are tasked to create effective recommendation systems for playlist generation under different sets of conditions in both allowable datasets and input data. Users are given a song, or multiple, and are tasked with generating a relevant, enjoyable playlist from the start. T  
+To this end, Spotify has been investing heavily in their data science in order to improve recommendations to users. One specific effort that Spotify launched is _[Spotify RecSys Challenge 2018](https://recsys-challenge.spotify.com/)_. In this challenge, entrants are tasked to create effective recommendation systems for playlist generation under different sets of conditions in both allowable datasets and input data. Users are given a song, or multiple, and are tasked with generating a relevant, enjoyable playlist from the start.
 
 In this project, we set out to accomplish many of the goals of the Spotify Challenge in our own playlist recommendations. We pursued various common methods of recommendation systems along with methods of our own devising in tackling the playlist recommendation challenge.
 
@@ -32,13 +32,28 @@ As for the content of the playlists then, we inspected the numbers of songs and 
 
 ![Songs](songcounts.png) ![art](artcount.png)
 
+The distribution of the top 20 artists over the first portion of the dataset is visualized below as a donut plot:
+
+![Top Artists](artist_donut.png)
+
 Another facet of the dataset that we explored was the average length of the playlists. This distribution was also incredibly right skewed. The median playlist was of length 49 tracks, with the mean being around 66 tracks. As for the artists, the median was 30 with a mean of 38 artists per playlist. This shows that there is a clear tendency for artists to be grouped in playlists with other songs from the same artist. It is also likely that longer playlists include more repeat artists because of what appears to be less right skew.
 
 
 ![art](playlistlen.png) ![art](artdist.png)
 
-To better understand the situation, however, we also explored the in depth audio feature data that is accessible for individual songs from the Spotify API. The data on songs from the API rates songs on particular features such as "energy", "danceability", or "valence" (a measure of how positive or negative the emotions in the songs are). Ultimately the models that we built using these features as a primary predictor of the next song was not at all good when it came down to evaluation.
+To better understand the situation, however, we also explored the in depth audio feature data that is accessible for individual songs from the Spotify API. The data on songs from the API rates songs on particular features such as "energy", "danceability", or "valence" (a measure of how positive or negative the emotions in the songs are). Ultimately the models that we built using these features as a primary predictor of the next song were not at all good when it came down to evaluation, mainly because they were fairly simple models and didn't take into account at all the structure of the playlist data. However, we did find some interesting things when exploring the data.
 
+The scatter matrix below explores relationships between a subset of the audio features, namely liveness, energy, loudness, and tempo. We chose to explore these more closely, as they seemed intuitively to be more closely interdependent on one another.
+
+![Scatter Matrix](scatter_matrix.png)
+
+This scatter matrix is mainly of interest because of the relationship between energy and loudness. The two features seem to be relatively positively correlated, so we will need to be careful of collinearity when we fit models with these predictors. As for the other predictors, we can see that we have a relatively good distribution across the range, which is to be expected because we have scaled this data to have mean of 0 and standard deviation of 1. This should make it work better when we apply distance based techniques like KMeans clustering and KNN to the data.
+
+Further, we also looked directly at the distribution of each predictor below:
+
+![KDE Plot](kdeplot.png)
+
+These plots are of great interest to us, as they display how our Spotify API features are distributed. This is super important when we apply these features to KMeans and KNN, as outliers or wide spreads could possibly sway the distance metrics inordinately. However, since we have already scaled our data, most of these plots look relatively normal. There are some features (like valence and tempo) that look much more normal, while others (like loudness and liveness) that are skewed either left or right. Additionally, time signature, mode, and key appear to be discrete values, so we may have to handle those carefully.
 
 
 ## Literature Review/Related Work:
