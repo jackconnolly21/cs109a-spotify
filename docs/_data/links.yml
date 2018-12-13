@@ -1,0 +1,23 @@
+docs_list_title: Navigation
+docs:
+
+- title: Overview
+  url: overview_link
+
+- title: Motivation
+  url: motivation_link
+
+- title: Description and EDA
+  url: description_eda_link
+
+- title: Literature Review
+  url: lit_review_link
+
+- title: Modeling Approach
+  url: modeling_approach_link
+
+- title: Results
+  url: results_link
+
+- title: Conclusions and Future Work
+  url: conclusions_link
