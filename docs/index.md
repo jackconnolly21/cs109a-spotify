@@ -185,12 +185,12 @@ Lastly our mean Click Score again places the model in the relative middle of the
 
 But why does the Markov-chain model apparently do so much better with the RPrec scoring method than the others? At its base, this makes sense because the whole idea of the model is that tracks that people put together on their own will likely be put together by people again. The one step random walk should do a fairly good job of getting the most likely songs as a set, but the ranking system of appearances in the sample set does not seem to perform as well as the other Spotify challenge methods for ensuring the most relevant songs are given first. This would suggest a need to work on the weighting system used by the algorithm. The mean Clicks Score also shows the issues as with the NCDG score, namely the member songs are not always ranked as the most relevant.
 
-Moving on though, let's take a closer look at the score distributions mased on K. First the below figure gives a quick glance of where the scores are in general.
+Moving on though, let's take a closer look at the score distributions based on K. First the below figure gives a quick glance of where the scores are in general.
 
 _Distribution of Scores by K; Summary_
 ![](images/overlayed_network_dists.png)
 
-The above graph, however, only gives us a basic idea of what's going on. There are two many lines to allow us to analyze the behavior at each K value. Thus, let's take a closer look at the distributions for each score at each K value.
+The above graph, however, only gives us a basic idea of what's going on. There are too many lines to allow us to analyze the behavior at each K value. Thus, let's take a closer look at the distributions for each score at each K value.
 
 _Distribution of Scores by K; Individual_
 ![](images/all_network_dists.png)
@@ -206,13 +206,18 @@ In this more in-depth view of the scoring methods by K value, we can see the mea
 ## Conclusions and Summary:
 _Review what was discussed in the Overview and Motivation sections (don’t repeat them word-for-word!). Discuss your contributions including the successes and areas for improvement._
 
-Overall, we have seen that the filtering and network models perform the best, significantly improving over the baseline models using nearest neighbor techniques. Our final models were comparable with some of the top models in the RecSys challenge, so we are very satisfied with our results. If we had more time and computing power, we would have liked to scale both of those models up larger, as they were both limited in terms of their size (the network was trained on about 20,000 playlists and ended up being about 7GB while filtering was only able to handle about 1,000). Ideally, we would be able to utilize sklearn's suppoer for sparse matrices to scale up filtering, but we weren't able to finalize that.
+Overall, we have seen that the filtering and network models perform the best, significantly improving over the baseline models using nearest neighbor techniques. Our final models were comparable with some of the top models in the RecSys challenge in some regards, so we are very satisfied with our results. If we had more time and computing power, we would have liked to scale both of those models up larger, as they were both limited in terms of their size (the network was trained on about 14000 playlists and ended up being about 7GB while filtering was only able to handle a limited subset of the data. In the scheme of the task, this is a significant drawback to our models because there may be limited computing power to be dedicated in actual production.
 
-Music recommendation is, in general, a challenging problem when we have millions of diverse songs to choose from. More complex techniques like deep RNNs and autoencoders seemed attractive at the beginning of the project, but ultimately weren't feasible for us to complete. This forced us to adapt and implement the fairly different models seen here. Overall, we feel confident in our model's ability to find relevant songs to continue and put together a great playlist. 
+The limits in music recommendation is, in general, come from us having an unmanageably large amount of data to work with. Model efficiency ultimately comes to play a huge role in the effectiveness of certain algorithms even if the performance of others could theoretically be better. More complex techniques like deep RNNs and autoencoders seemed attractive at the beginning of the project, but ultimately weren't feasible for us to complete. This forced us to adapt and implement the fairly different models seen here. Overall, we feel confident in our model's ability to find relevant songs to continue and put together a great playlist. 
+
+By this standard, we accomplished much of our goal in emulating the RecSys Challenge. 
 
 To interact with the models and judge their reccommendations purely based off your preferences, we have a demo of them [Here](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/). (Depending on your screen size/resolution you may need to zoom out a bit, on mac its <kbd>⌘</kbd><kbd>-</kbd>)
 
 ## Future work:
-_Discuss extensions to and new directions for your work. What do you think would be interesting to pursue next? Are there any ideas worth exploring that you didn’t get a chance to explore?_
 
-Sparse matrices for collaborative filtering?
+Although our model performed very well, there are some different approaches that also could be further explored in solving this problem. For example, we would ideally have been able to utilize sklearn's support for sparse matrices to scale up collaborative filtering to include more of the dataset, but we weren't able to finalize that.
+
+One could also have tried harder to emulate the most successful of the models from the Spotify Challenge. The patterns most common in their structures are all ones that we did not generally implement. The first thing that most groups did was break the problem up into a two stage process. The first part of the process being a way to gather a bunch of songs that are decent matches using a low cost kind of process on a large dataset. The second part was then using a higher cost method to narrow down to the best recommendations. Another thing that many successful models did were use a neural net in the recommendation model. Given the two-step process, we could have used a neural net for the second part. We did not go here because of the discouragement of using neural nets for this project by the course staff. One also could work in a seperate architecture for the cold-start variation of the problem. 
+
+When all is said and done, recommendation of content is an unsolvable problem because of its subjective nature. For this reason, people will always be devising new methods to better predict people's tastes, musical and otherwise. With the great benefits of recommendation, however, come the risks of unintended discrimination. Our own models are as susceptible as any to recommend the most popular songs more than others. This has the risk of creating an echo-chamber of music where future listening is determined heavily by past listening. There are serious implications of discrimination afoot. Hopefully Spotify is fine tuning this practice in a way that is in the true interests of people and not just associated, sponsored material.  
