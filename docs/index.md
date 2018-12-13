@@ -206,13 +206,12 @@ In this more in-depth view of the scoring methods by K value, we can see the mea
 
 
 ## Conclusions and Summary:
-_Review what was discussed in the Overview and Motivation sections (don’t repeat them word-for-word!). Discuss your contributions including the successes and areas for improvement._
 
 Overall, we have seen that the filtering and network models perform the best, significantly improving over the baseline models using nearest neighbor techniques. Our final models were comparable with some of the top models in the RecSys challenge in some regards, so we are very satisfied with our results. If we had more time and computing power, we would have liked to scale both of those models up larger, as they were both limited in terms of their size (the network was trained on about 14000 playlists and ended up being about 7GB while filtering was only able to handle a limited subset of the data. In the scheme of the task, this is a significant drawback to our models because there may be limited computing power to be dedicated in actual production.
 
-The limits in music recommendation is, in general, come from us having an unmanageably large amount of data to work with. Model efficiency ultimately comes to play a huge role in the effectiveness of certain algorithms even if the performance of others could theoretically be better. More complex techniques like deep RNNs and autoencoders seemed attractive at the beginning of the project, but ultimately weren't feasible for us to complete. This forced us to adapt and implement the fairly different models seen here. Overall, we feel confident in our model's ability to find relevant songs to continue and put together a great playlist. 
+There are computational limits in music recommendation in general because of the immense amount of data to work with. The potential for future work that is in part outlined below addresses this concern. Model efficiency ultimately comes to play a huge role in the effectiveness of certain algorithms even if the performance of others could theoretically be better. More complex techniques like deep RNNs and autoencoders seemed attractive at the beginning of the project, but ultimately weren't feasible for us to complete. This forced us to adapt and implement the fairly different models seen here. Overall, we feel confident in our model's ability to find relevant songs to continue and put together a great playlist. 
 
-By this standard, we accomplished much of our goal in emulating the RecSys Challenge. 
+By this standard, we accomplished much of our goal in emulating the RecSys Challenge. Toward the loftier goals of recommendation systems, it is unlikely we contributed anything of true practical value in this project. Our own understanding of the problem, however, was greatly enhanced. As we are all aspiring data scientists, the work that we have done is foundational to our future research and industry implementations that will shape the future. We also go forward now with an enhanced understanding of the algorithms that are so influential in our own daily lives. 
 
 ## Future work:
 
