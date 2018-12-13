@@ -5,6 +5,7 @@ title: Group 55 - Music Recommender
 # CS109a Final Project: *Music Recommender System*
 ##### A project by Nicholas Kochanek, Jack Connolly, Christopher Jarrett, and Andrew Soldini
 
+<a id="overview_link"></a>
 ## Overview:
 _Provide an overview of the project. It is important that you include a general context for the project as well as an overall description of the project. Any introductory information that’s specific to the project should also be included._
 
@@ -16,6 +17,7 @@ To this end, Spotify has been investing heavily in their data science in order t
 
 In this project, we set out to accomplish many of the goals of the Spotify Challenge in our own playlist recommendations. We pursued various common methods of recommendation systems along with methods of our own devising in tackling the playlist recommendation challenge.
 
+<a id="motivation_link"></a>
 ## Motivation:
 _Introduce the project motivation both as a whole as well as motivations for important defining aspects of your work. For example were there any visualization or UI primitives that informed your work?_
 

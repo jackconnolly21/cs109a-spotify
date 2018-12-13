@@ -35,6 +35,14 @@
     </header>
 
     <main id="content" class="main-content" role="main">
+
+      <h2>{{ site.data.links.docs_list_title }}</h2>
+      <ul>
+         {% for item in site.data.links.docs %}
+            <li><a href="#{{ item.url }}">{{ item.title }}</a></li>
+         {% endfor %}
+      </ul>
+
       {{ content }}
 
       <footer class="site-footer">
