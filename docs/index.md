@@ -83,7 +83,7 @@ Our last model, based on a Markov Chain random walk, was inspired by the descrip
 **Make your own Playlist!!**  
 Here is a link to a demonstration of our models working in real time: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/). This allows us to visually experiment with the models and get an idea of how they perform, in addition to actually constructing playlists if desired!
 
-#### 1. K-Nearest-Neighbors Based on Playlist
+#### 1. K-Nearest-Neighbors Based on Playlist (Basic Collaborative Filtering)
 **Motivation:** The motivation for this model was that with so many users on Spotify and so many playlists, there is likely to be a playlist similar to the one you want that already exists. Based on this, we can try to model the "distance" between playlists, and so then when given a playlist to continue, we can find the closest playlists in the training data and output songs from those playlist with weights proportional to how often they are found.  
 
 **Implementation:** We implemented the distance metric using a sort of "cosine similarity" measure, where each vector is a binary list where each element is whether or not each song is in the playlist. Then the vectors for two playlists are multiplied together and divided by their magnitudes to calculate a distance measure. To implement this over the MPD, we read in training data given to the model and stored these vectors, then given a playlist to predict more songs for, found the cosine distance from that playlist to all others in the training set, then found 500 unique songs in the closest playlists. To order these songs, we weighted them based on how many times they were found in the closest playlists, weighting those higher.
@@ -131,10 +131,11 @@ return the 500 most common songs in all_samples in decreasing order of occurrenc
 Because our model will return songs that share the most playlists with the seed songs because the random walks are weighted, this model now effectively implements the problem stated in its motivation, that is to return the songs that are most likely to have shared a playlist with the current songs in the past.
 
 
-#### 4. Collaborative Filtering
+#### 4. Neural Collaborative Filtering
 **Motivation:** The motivation for trying collaborative filtering is that it has been somewhat of the standard approach when building recommendation engines. Using filtering to find similar users and playlists through matrix factorization has generally yielded fairly good results, so we wanted to test it out as it applied to playlist continuation in the Spotify setting. Also, intuitively it makes sense, as finding similar users should help to find similar songs to predict to continue a playlist.  
 
  **Implementation:**
+ There are several variants of neural collaborative filtering ranging from relatively simple to incredibly complex. To strike a balance we decided to use the multi-layer perceptron variant that uses a fully connected neural network to predict if a set of given tracks will 
 
 <a id="results_link"> </a>
 ## Results:
