@@ -72,11 +72,13 @@ Our last model, based on a Markov Chain random walk, was inspired by the descrip
 <a id="modeling_approach_link"> </a>
 ## Modeling Approach:
 
-Link to a demonstration of our models working in real time: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/)
+**Make your own Playlist!!**  
+Here is a link to a demonstration of our models working in real time: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/). This allows us to visually experiment with the models and get an idea of how they perform, in addition to actually constructing playlists if desired!
 
 #### 1. K-Nearest-Neighbors Based on Playlist
-**Motivation:** The motivation for this model was that with so many users on Spotify and so many playlists, there is likely to be a playlist similar to the one you want that already exists. Based on this, we can try to model the "distance" between playlists, and so then when given a playlist to continue, we can find the closest playlists in the training data and output songs from those playlist with weights proportional to how often they are found.
- **Implementation:** We implemented the distance metric using a sort of "cosine similarity" measure, where each vector is a binary list where each element is whether or not each song is in the playlist. Then the vectors for two playlists are multiplied together and divided by their magnitudes to calculate a distance measure. To implement this over the MPD, we read in training data given to the model and stored these vectors, then given a playlist to predict more songs for, found the cosine distance from that playlist to all others in the training set, then found 500 unique songs in the closest playlists. To order these songs, we weighted them based on how many times they were found in the closest playlists, weighting those higher.
+**Motivation:** The motivation for this model was that with so many users on Spotify and so many playlists, there is likely to be a playlist similar to the one you want that already exists. Based on this, we can try to model the "distance" between playlists, and so then when given a playlist to continue, we can find the closest playlists in the training data and output songs from those playlist with weights proportional to how often they are found.  
+
+**Implementation:** We implemented the distance metric using a sort of "cosine similarity" measure, where each vector is a binary list where each element is whether or not each song is in the playlist. Then the vectors for two playlists are multiplied together and divided by their magnitudes to calculate a distance measure. To implement this over the MPD, we read in training data given to the model and stored these vectors, then given a playlist to predict more songs for, found the cosine distance from that playlist to all others in the training set, then found 500 unique songs in the closest playlists. To order these songs, we weighted them based on how many times they were found in the closest playlists, weighting those higher.
 
 #### 2. Clustering and KNN based on Audio Features  
 **Motivation:** Our motivation for this model was to be very much a baseline for the other models. Intuitively, we wanted to test how well the audio features could predict how close songs were, independent of data from the MPD. We thought that we might be able to achieve some combination of clustering and nearest neighbors modeling to do better than random chance (which almost never retrieves relevant songs).
@@ -124,8 +126,9 @@ Because our model will return songs that share the most playlists with the seed 
 
 
 #### 4. Collaborative Filtering
-**Motivation:** The motivation for trying collaborative filtering is that it has been somewhat of the standard approach when building recommendation engines. Using filtering to find similar users and playlists through matrix factorization has generally yielded fairly good results, so we wanted to test it out as it applied to playlist continuation in the Spotify setting. Also, intuitively it makes sense, as finding similar users should help to find similar songs to predict to continue a playlist.
- **Implementation:** 
+**Motivation:** The motivation for trying collaborative filtering is that it has been somewhat of the standard approach when building recommendation engines. Using filtering to find similar users and playlists through matrix factorization has generally yielded fairly good results, so we wanted to test it out as it applied to playlist continuation in the Spotify setting. Also, intuitively it makes sense, as finding similar users should help to find similar songs to predict to continue a playlist.  
+
+ **Implementation:**
 
 <a id="results_link"> </a>
 ## Results:
