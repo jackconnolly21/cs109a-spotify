@@ -67,7 +67,6 @@ For our collaborative filtering approach, we researched previous implementations
 Our last model, based on a Markov Chain random walk, was inspired by the description of the web as a random walk (as noted in many CS courses). In our research, we found that Markov Chains had sometimes been applied to give recommendations for webpages to visit (even in tandem with collaborative filtering), but didn't find anything as it related to music recommendation/playlist continuation. In [this paper](https://cdn.uclouvain.be/public/Exports%20reddot/iag/documents/WP123_Fouss.pdf), the authors discuss an application Markov Chains to recommendations on the web. We used this as guidance when implementing our own system.
 
 ## Modeling Approach:
-_What was your baseline model for comparison? What further models did you implement? Description of your implementations beyond the baseline model. Briefly summarize any changes in your project goals or implementation plans you have made along the way. These changes are a natural part of any project, even those that seem the most straightforward at the beginning. The story you tell about how you arrived at your results can powerfully illustrate your process._
 
 Link to a demonstration of our models working in real time: [Our Model Demonstration](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/)
 
@@ -80,7 +79,7 @@ Link to a demonstration of our models working in real time: [Our Model Demonstra
 #### 2. Clustering and KNN based on Audio Features  
 **Motivation:** Our motivation for this model was to be very much a baseline for the other models. Intuitively, we wanted to test how well the audio features could predict how close songs were, independent of data from the MPD. We thought that we might be able to achieve some combination of clustering and nearest neighbors modeling to do better than random chance (which almost never retrieves relevant songs).
 
-**Implementation:** As we implemented it, our model predicts in two steps. First, it clusters all songs it has seen before, then for each input of seed songs (some $K \in [1,5,10,25,50]$), finds the 'closest' songs to those, in some way. The class we implemented has three different predict methods, namely `predict`, `predict2`, and `predict3`. They all use the Spotify API audio features to cluster and make predictions, relatively ignoring the MPD aside as input and output uris. The first simply calculates the most populous cluster among the input data, then randomly samples 500 songs from that cluster. The second tries to match the distribution of input songs more closely, outputting the number of songs in the input per cluster scaled up for a total of 500. Finally, the last method uses the audio features even more, calculating the 'distance' of every song in the same cluster to the 'average' of the input songs, outputting the 500 songs closest to the average, in order. Overall, these methods do fairly poorly at matching the held out songs, only retrieving relevant songs fairly rarely. The R-precision of these methods is in the range of 0.005-0.011. The pseudocode for `predict3` goes like follows (for a single input playlist):
+**Implementation:** As we implemented it, our model predicts in two steps. First, it clusters all songs it has seen before, then for each input of seed songs (some K in [1,5,10,25,50]), finds the 'closest' songs to those, in some way. The class we implemented has three different predict methods, namely `predict`, `predict2`, and `predict3`. They all use the Spotify API audio features to cluster and make predictions, relatively ignoring the MPD aside as input and output uris. The first simply calculates the most populous cluster among the input data, then randomly samples 500 songs from that cluster. The second tries to match the distribution of input songs more closely, outputting the number of songs in the input per cluster scaled up for a total of 500. Finally, the last method uses the audio features even more, calculating the 'distance' of every song in the same cluster to the 'average' of the input songs, outputting the 500 songs closest to the average, in order. Overall, these methods do fairly poorly at matching the held out songs, only retrieving relevant songs fairly rarely. The R-precision of these methods is in the range of 0.005-0.011. The pseudocode for `predict3` goes like follows (for a single input playlist):
 
 ```
 1. Find the max_cluster in the input
@@ -127,15 +126,14 @@ Because our model will return songs that share the most playlists with the seed 
 
 
 ## Results:
-_Describe the results and emphasize the most important results. Did you have to reconsider some of the original assumptions?_
 
-We decided to evaluate our models based on the same metrics used in the Spotify RecSys [contest rules](https://recsys-challenge.spotify.com/rules), namely R-Precision (RPrec), Normalized Discounted Cumulative Gain (NDCG), and Recommended Song Clicks (RSC). In the following definitions, $G$ is the set of ground truth tracks representing the held out songs from each playlist and $R$ is the ordered list of recommended songs returned by the recommendation system.
+We decided to evaluate our models based on the same metrics used in the Spotify RecSys [contest rules](https://recsys-challenge.spotify.com/rules), namely R-Precision (RPrec), Normalized Discounted Cumulative Gain (NDCG), and Recommended Song Clicks (RSC). In the following definitions, G is the set of ground truth tracks representing the held out songs from each playlist and R is the ordered list of recommended songs returned by the recommendation system.
 
 * R-Precision: The metric counts "number of retrieved relevant tracks divided by the number of known relevant tracks," rewarding the total number of retrieved relevant tracks, regardless of order.
 
 * Normalized Discounted Cumulative Gain (NDCG): This metric takes into account the order of the returned songs, rewarding relevant songs placed higher in the returned list. It is calculated as Discounted Cumulative Gain (DCG), divided by the Ideal Discounted Cumulative Gain (IDCG), where the returned songs are ordered perfectly.
 
-* Recommended Songs Clicks (RSC): This measures how many "clicks" a Spotify user would need to find the first relevant song in the recommendations (the first song actually in the rest of the playlist $G$), where Spotify displays recommended songs in groups of 10. Therefore it's simply finding the first relevant song and returning its position in the list divided by 10 and truncated.
+* Recommended Songs Clicks (RSC): This measures how many "clicks" a Spotify user would need to find the first relevant song in the recommendations (the first song actually in the rest of the playlist G), where Spotify displays recommended songs in groups of 10. Therefore it's simply finding the first relevant song and returning its position in the list divided by 10 and truncated.
 
 The more formal mathematical description of these metrics can again be found in the [contest rules](https://recsys-challenge.spotify.com/rules) for Spotify's challenge, while the code implementing them is in our notebook.
 
@@ -181,7 +179,7 @@ _Mean Scores by K_
 
 Above we can start to see trends in the various evaluation methods. It's important to note that because of constraints on local processing power, the network does not necessarily have nodes for all of the test songs which is hurting performance, but a natural drawback of the Markov-chain approach: namely the model itself is quite large. We counter this by randomly sampling songs from the network with equal weight whenever a seed song is not in the network.
 
-Looking at the performance of the network approach based on the three scoring systems, we can see that the model seems to perform best for the $RPrec$ score and NCDG score methods using K=25 seed songs, while the mean clicks required to find a relevant song is best with K=100 seed songs.
+Looking at the performance of the network approach based on the three scoring systems, we can see that the model seems to perform best for the RPrec score and NCDG score methods using K=25 seed songs, while the mean clicks required to find a relevant song is best with K=100 seed songs.
 
 Furthermore, while we do not have access to the official test sets used by Spotify, we can start to see the benefits and drawbacks of the Markov-chain based model. The Markov-chain based model seems to perform best (relative to the other metrics) on the RPrec score. The best performing Spotify challenge contestant had a score of RPrec = .224 on the official test set, whereas, depending on the K value, our model had a mean RPrec in {0.17,0.28, 0.32, 0.28}. This should of course be taken with a grain of salt as our model most likely would not have had the best performance in the challenge, but does signal that it is a reasonably good approach.
 
@@ -217,6 +215,8 @@ Overall, we have seen that the filtering and network models perform the best, si
 The limits in music recommendation is, in general, come from us having an unmanageably large amount of data to work with. Model efficiency ultimately comes to play a huge role in the effectiveness of certain algorithms even if the performance of others could theoretically be better. More complex techniques like deep RNNs and autoencoders seemed attractive at the beginning of the project, but ultimately weren't feasible for us to complete. This forced us to adapt and implement the fairly different models seen here. Overall, we feel confident in our model's ability to find relevant songs to continue and put together a great playlist.
 
 By this standard, we accomplished much of our goal in emulating the RecSys Challenge.
+
+To interact with the models and judge their reccommendations purely based off your preferences, we have a demo of them [Here](http://ec2-3-16-137-40.us-east-2.compute.amazonaws.com:3000/). (Depending on your screen size/resolution you may need to zoom out a bit, on mac its <kbd>⌘</kbd><kbd>-</kbd>)
 
 ## Future work:
 
