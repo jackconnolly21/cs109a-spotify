@@ -159,7 +159,7 @@ _Mean Scores by K_
 
 _Mean Scores by K_
 
-![means](knn_means_vs_k.png)
+![means](images/knn_means_vs_k.png)
 
 
 #### 2. K-Nearest-Neighbors Clustering on Audio Features
@@ -226,6 +226,7 @@ In this more in-depth view of the scoring methods by K value, we can see the mea
 
 
 #### 4. Collaborative Filtering
+
 
 
 
