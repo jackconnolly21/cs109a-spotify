@@ -89,10 +89,8 @@ Here is a link to a demonstration of our models working in real time: [Our Model
 
 ```
 1. Find the max_cluster in the input
-
 2. Calculate the average features for the input
 3. Calculate the distance between average and each song
-
 4. Return the 500 'closest' songs in the cluster
 ```
 
@@ -101,8 +99,8 @@ Here is a link to a demonstration of our models working in real time: [Our Model
 ##### Motivation:
 
 Our network based approach was based around the idea that tracks that people have put together into playlists in the
-past will likely be put together into playlists in the future. Thus we wanted to create a probabalistic method to
-represent how "connected" tracks were to one another. In this sense, the basic approach of this model is to reccomend
+past will likely be put together into playlists in the future. Thus we wanted to create a probabilistic method to
+represent how "connected" tracks were to one another. In this sense, the basic approach of this model is to recommend
 songs based on how likely they are to belong with the seed songs.
 
 ##### Implementation:
@@ -147,9 +145,26 @@ The more formal mathematical description of these metrics can again be found in 
 
 #### 1. K-Nearest-Neighbors Based on Playlist
 
+This model was more of a baseline for the better two, the scores are significantly, yet still outperform KNN based on audio features. This is likely because it is able to take into account the structure of the playlist, and so it can better find direct relationships between certain songs without relying to finding those through the secondary audio features that may not be totally accurate.
+
+_Mean Scores by K_
+
+| K       | Mean RPrec  | Mean NDCG Score | Mean Clicks Score |
+| :-----: |:---:| :----:| :----:|
+|  1  |   0.   |   0.  |   40.   |
+|  5  |   0.   |   0.  |   38.   |
+|  10 |   0.   |   0.  |   37.   |
+|  25 |   0.   |   0.  |   37.   |
+| 100 |   0.   |   0.  |   34.   |
+
+_Mean Scores by K_
+
+<!-- ![](images/knn_graphs.png) -->
+
+
 #### 2. K-Nearest-Neighbors Clustering on Audio Features
 
-Because this model is meant to be very much a baseline, these metrics confirm our assumption that it does only a little better than random chance. While it regularly finds some songs (generally no more than 1 or 2) from the held out songs, the random chance model we tested nearly never retrieved a relevant song. We thought this would be a good baseline as well as giving us a chance to apply some models we learned in class, whereas the two better models we implemented were extensions that we didn't cover at all this semester. This results of the metrics for different values of K are below.
+Because this model again is meant to be very much a baseline, these metrics confirm our assumption that it does only a little better than random chance. While it regularly finds some songs (generally no more than 1 or 2) from the held out songs, the random chance model we tested nearly never retrieved a relevant song. We thought this would be a good baseline as well as giving us a chance to apply some models we learned in class, whereas the two better models we implemented were extensions that we didn't cover at all this semester. This results of the metrics for different values of K are below.
 
 _Mean Scores by K_
 
@@ -210,9 +225,10 @@ _Distribution of Scores by K; Individual_
 In this more in-depth view of the scoring methods by K value, we can see the mean trends discussed earlier but in more detail. In terms of RPrec score, we can watch the distribution shift right showing the improved RPrec score as K increase, but then shift left again once K=100. We see a similar result in the NDCG scores. Interestingly we can see in the click scores that there are two main 'bumps' in the distribution. The first is around 1, showing that most times there is relevant song on the first page or in the first couple pages. Then there is another bump around 51 (the max value allowed per the SysRec evaluation specs), which shows that sometimes the reccomendations contain none of the expected songs. As K increases, however, we can see that the bump at 1 grows higher and higher, while the bump at around 51 shrinks showing the overal improvement in the predictions (based on click score) as K increases.
 
 
-
-
 #### 4. Collaborative Filtering
+
+
+
 
 <a id="conclusions_link"> </a>
 ## Conclusions and Summary:
