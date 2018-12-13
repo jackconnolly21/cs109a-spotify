@@ -14,9 +14,15 @@ Streaming services like Spotify, Pandora, and Apple Music have radically reshape
 
 Because songs are relatively short and listened to in succession of one another, the primary unit of recommendation that we deal with is that of the ___playlist___. Playlists are a series of songs in particular succession that are grouped to be played at the same time. Playlists can be characterized by a mood or a genre that people look to use enhance the spirit of a moment in their lives. This is why is the essential unit of recommendation for music. Being able to produce coherent, or even good, playlists has the potential to greatly improve our music listening experiences.
 
-To this end, Spotify has been investing heavily in their data science in order to improve recommendations to users. One specific effort that Spotify launched is _[Spotify RecSys Challenge 2018](https://recsys-challenge.spotify.com/)_. In this challenge, entrants are tasked to create effective recommendation systems for playlist generation under different sets of conditions in both allowable datasets and input data. Users are given a song, or multiple, and are tasked with generating a relevant, enjoyable playlist from the start.
+To this end, Spotify has been investing heavily in their data science in order to improve recommendations to users. One specific effort that Spotify launched is _[Spotify RecSys Challenge 2018](https://recsys-challenge.spotify.com/)_. In this challenge, entrants are tasked to create effective recommendation systems for playlist generation under different sets of conditions in both allowable datasets and input data. Users are given a song, or multiple, and are tasked with generating a relevant, enjoyable playlist from the start. The input to the model is either:
 
-In this project, we set out to accomplish many of the goals of the Spotify Challenge in our own playlist recommendations. We pursued various common methods of recommendation systems along with methods of our own devising in tackling the playlist recommendation challenge.
+1. A starter playlist of 10 or more songs
+
+2. A cold start of a single seed song  
+
+In this project, we set out to recommend songs for both of these situations. We pursued various common methods of recommendation systems along with methods of our own devising in tackling the playlist recommendation challenge. 
+
+
 
 <a id="motivation_link"> </a>
 ## Motivation:
@@ -145,21 +151,21 @@ The more formal mathematical description of these metrics can again be found in 
 
 #### 1. K-Nearest-Neighbors Based on Playlist
 
-This model was more of a baseline for the better two, the scores are significantly, yet still outperform KNN based on audio features. This is likely because it is able to take into account the structure of the playlist, and so it can better find direct relationships between certain songs without relying to finding those through the secondary audio features that may not be totally accurate.
+This model was more of a baseline for the better two models, with the scores hardly, if at all, outperforming the KNN based on audio features. This is likely because it is able to take into account the structure of the playlist, and so it can somewhat better find direct relationships between certain songs without relying to finding those through the secondary audio features that may not be totally accurate. The dataset used to generate the model was very limited due to time constraint, making it unable to make very good predictions. The function for comparison may also just have been inaccurate as well.
 
 _Mean Scores by K_
 
 | K       | Mean RPrec  | Mean NDCG Score | Mean Clicks Score |
 | :-----: |:---:| :----:| :----:|
-|  1  |   0.   |   0.  |   40.   |
-|  5  |   0.   |   0.  |   38.   |
-|  10 |   0.   |   0.  |   37.   |
-|  25 |   0.   |   0.  |   37.   |
-| 100 |   0.   |   0.  |   34.   |
+|  1  |   0.007   |   0.0087 |   33.2626   |
+|  5  |   0.0074  |   0.0089 |   33.6605   |
+|  10 |   0.007   |   0.0078 |   34.4657   |
+|  25 |   0.0056  |   0.0069 |   35.4501   |
+| 100 |   0.002   |   0.004  |   43.1883   |
 
 _Mean Scores by K_
 
-<!-- ![](images/knn_graphs.png) -->
+![means](images/knn_means_vs_k.png)
 
 
 #### 2. K-Nearest-Neighbors Clustering on Audio Features
@@ -230,14 +236,15 @@ In this more in-depth view of the scoring methods by K value, we can see the mea
 
 
 
+
 <a id="conclusions_link"> </a>
 ## Conclusions and Summary:
 
-Overall, we have seen that the filtering and network models perform the best, significantly improving over the baseline models using nearest neighbor techniques. Our final models were comparable with some of the top models in the RecSys challenge in some regards, so we are very satisfied with our results. If we had more time and computing power, we would have liked to scale both of those models up larger, as they were both limited in terms of their size (the network was trained on about 14000 playlists and ended up being about 7GB while filtering was only able to handle a limited subset of the data. In the scheme of the task, this is a significant drawback to our models because there may be limited computing power to be dedicated in actual production.
+Overall, we have seen that the filtering and network models perform the best, significantly improving over the baseline models using nearest neighbor techniques. Our final models were comparable with some of the top models in the RecSys challenge in some regards, so we are very satisfied with our results. If we had more time and computing power, we would have liked to scale both of those models up larger, as they were both limited in terms of their size (the network was trained on about 14000 playlists and ended up being about 7GB while filtering was only able to handle a limited subset of the data. In the scheme of the task, this is a significant drawback to our models because there may be limited computing power to be dedicated in actual production. 
 
 There are computational limits in music recommendation in general because of the immense amount of data to work with. The potential for future work that is in part outlined below addresses this concern. Model efficiency ultimately comes to play a huge role in the effectiveness of certain algorithms even if the performance of others could theoretically be better. More complex techniques like deep RNNs and autoencoders seemed attractive at the beginning of the project, but ultimately weren't feasible for us to complete. This forced us to adapt and implement the fairly different models seen here.  
 
-Overall, we feel confident in our model's ability to find relevant songs to continue and put together a great playlist. By this standard, we accomplished much of our goal in emulating the RecSys Challenge. Toward the loftier goals of recommendation systems, it is unlikely our model in its current form is of practical value. Our introduction of a Markov random walk model is an elegant solution to this problem. The simplicity of the model, relative to its accuracy gives us hope that if modified presciently, it could be a very successful technique in music recommendation.
+Overall, we feel confident in our model's ability to find relevant songs to continue and put together a great playlist. For both the cold start and starter playlist case, we had top notch recommendations. By this standard, we accomplished much of our goal in emulating the RecSys Challenge. Toward the loftier goals of recommendation systems, it is unlikely our model in its current form is of practical value. Our introduction of a Markov random walk model is an elegant solution to this problem. The simplicity of the model, relative to its accuracy gives us hope that if modified presciently, it could be a very successful technique in music recommendation. 
 
 With regards to our personal motivations in undertaking this project, much has been learned through our efforts. Our own understanding of the problem, however, was greatly enhanced. As we are all aspiring data scientists, the work that we have done is foundational to our future research and industry implementations that will shape the future. We also go forward now with an enhanced understanding of the algorithms that are so influential in our own daily lives.
 
