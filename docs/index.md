@@ -27,7 +27,7 @@ As aspiring data scientists, these services are also treasure troves of data tha
 
 As for the motivation behind the techniques that we employed, we wanted to stay true to the Spotify Challenge, focusing our generation of new playlists primarily based on actual user-generated playlists. Because of this, our models were ones that could see the data as a graphical web of interactions between songs that appear together in these user generated playlists. We also believed that our model's method and performance can be well demonstrated through the use of an interactive React web app that we have hosted and linked to below. We have really worked to bring this challenge to life.
 
-
+<a id="description_eda_link"></a>
 ## Description of Data and EDA:
 _What data are you dealing with? What methods have you used to explore the data (incl. initial explorations, models, data cleansing and reconciliation, etc)? What insights did you gain? How did those methods influence your work?_
 
@@ -60,7 +60,7 @@ Further, we also looked directly at the distribution of each predictor below:
 
 These plots are of great interest to us, as they display how our Spotify API features are distributed. This is super important when we apply these features to KMeans and KNN, as outliers or wide spreads could possibly sway the distance metrics inordinately. However, since we have already scaled our data, most of these plots look relatively normal. There are some features (like valence and tempo) that look much more normal, while others (like loudness and liveness) that are skewed either left or right. Additionally, time signature, mode, and key appear to be discrete values, so we may have to handle those carefully.
 
-
+<a id="lit_review_link"></a>
 ## Literature Review/Related Work:
 _This can include noting any key papers, texts, other software sources, talks or websites that you have used to develop your modeling approach and/or that informed your demo/site._
 
@@ -72,6 +72,7 @@ For our collaborative filtering approach, we researched previous implementations
 
 Our last model, based on a Markov Chain random walk, was inspired by the description of the web as a random walk (as noted in many CS courses). In our research, we found that Markov Chains had sometimes been applied to give recommendations for webpages to visit (even in tandem with collaborative filtering), but didn't find anything as it related to music recommendation/playlist continuation. In [this paper](https://cdn.uclouvain.be/public/Exports%20reddot/iag/documents/WP123_Fouss.pdf), the authors discuss an application Markov Chains to recommendations on the web. We used this as guidance when implementing our own system.
 
+<a id="modeling_approach_link"></a>
 ## Modeling Approach:
 _What was your baseline model for comparison? What further models did you implement? Description of your implementations beyond the baseline model. Briefly summarize any changes in your project goals or implementation plans you have made along the way. These changes are a natural part of any project, even those that seem the most straightforward at the beginning. The story you tell about how you arrived at your results can powerfully illustrate your process._
 
@@ -128,6 +129,7 @@ Because our model will return songs that share the most playlists with the seed 
 #### 4. Collaborative Filtering
 
 
+<a id="results_link"></a>
 ## Results:
 _Describe the results and emphasize the most important results. Did you have to reconsider some of the original assumptions?_
 
@@ -210,7 +212,7 @@ In this more in-depth view of the scoring methods by K value, we can see the mea
 
 #### 4. Collaborative Filtering
 
-
+<a id="conclusions_link"></a>
 ## Conclusions and Summary:
 _Review what was discussed in the Overview and Motivation sections (don’t repeat them word-for-word!). Discuss your contributions including the successes and areas for improvement._
 
