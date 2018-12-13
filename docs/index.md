@@ -145,21 +145,21 @@ The more formal mathematical description of these metrics can again be found in 
 
 #### 1. K-Nearest-Neighbors Based on Playlist
 
-This model was more of a baseline for the better two, the scores are significantly, yet still outperform KNN based on audio features. This is likely because it is able to take into account the structure of the playlist, and so it can better find direct relationships between certain songs without relying to finding those through the secondary audio features that may not be totally accurate.
+This model was more of a baseline for the better two models, with the scores hardly, if at all, outperforming the KNN based on audio features. This is likely because it is able to take into account the structure of the playlist, and so it can somewhat better find direct relationships between certain songs without relying to finding those through the secondary audio features that may not be totally accurate. The dataset used to generate the model was very limited due to time constraint, making it unable to make very good predictions. The function for comparison may also just have been inaccurate as well.
 
 _Mean Scores by K_
 
 | K       | Mean RPrec  | Mean NDCG Score | Mean Clicks Score |
 | :-----: |:---:| :----:| :----:|
-|  1  |   0.   |   0.  |   40.   |
-|  5  |   0.   |   0.  |   38.   |
-|  10 |   0.   |   0.  |   37.   |
-|  25 |   0.   |   0.  |   37.   |
-| 100 |   0.   |   0.  |   34.   |
+|  1  |   0.007   |   0.0087 |   33.2626   |
+|  5  |   0.0074  |   0.0089 |   33.6605   |
+|  10 |   0.007   |   0.0078 |   34.4657   |
+|  25 |   0.0056  |   0.0069 |   35.4501   |
+| 100 |   0.002   |   0.004  |   43.1883   |
 
 _Mean Scores by K_
 
-<!-- ![](images/knn_graphs.png) -->
+![means](knn_means_vs_k.png)
 
 
 #### 2. K-Nearest-Neighbors Clustering on Audio Features
