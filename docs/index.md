@@ -135,7 +135,15 @@ Because our model will return songs that share the most playlists with the seed 
 **Motivation:** The motivation for trying collaborative filtering is that it has been somewhat of the standard approach when building recommendation engines. Using filtering to find similar users and playlists through matrix factorization has generally yielded fairly good results, so we wanted to test it out as it applied to playlist continuation in the Spotify setting. Also, intuitively it makes sense, as finding similar users should help to find similar songs to predict to continue a playlist.  
 
  **Implementation:**
+<<<<<<< HEAD
  There are several variants of neural collaborative filtering ranging from relatively simple to incredibly complex. To strike a balance we decided to use the multi-layer perceptron variant that uses a fully connected neural network to predict if a set of given tracks will
+=======
+ There are several variants of neural collaborative filtering ranging from relatively simple to incredibly complex. To strike a balance we decided to use the multi-layer perceptron variant that uses a fully connected neural network to predict how likely a given set of tracks belongs to each of the playlists the model was exposed to. The model takes two inputs, a vector representing playlists and a vector representing songs. Each vector is sparse-encoded such that an entry is 1 if the corresponding interaction has occured. These vectors are each fed into an embedding, the outputs of which are then concatenated. The concatenated outputs are fed into a set of two hidden layers with the activation set to ReLU and the outputs of those are fed into a sigmoid output layer. Given a list of tracks the model predicts the likelihood of each track belongining to the playlists it has seen and uses that information to recommend other songs in a similar fashion to the KNN model.
+ 
+ ![](images/neural_cf_diagram.png)
+ 
+ This model was inspired by the multilayer perceptron model from the paper [Neural Collaborative Filtering](https://www.comp.nus.edu.sg/~xiangnan/papers/ncf.pdf) by Xiangnan He, Lizi Liao, and Hanwang Zhang.
+>>>>>>> 3887293cea6c7c755d9f5e1cec23167534909d62
 
 <a id="results_link"> </a>
 ## Results:
@@ -239,15 +247,17 @@ _Mean Scores by K_
 
 | K       | Mean RPrec  | Mean NDCG Score | Mean Clicks Score |
 | :-----: |:---:| :----:| :----:|
-| 1     | 0. | 0. | 0. |
-| 5     | 0. | 0. | 0. |
-| 10    | 0. | 0. | 0. |
-| 25    | 0. | 0. | 0. |
-| 100   | 0. | 0. | 0. |
+| 1     | 0.0035 | 0.0081 | 45.6241 |
+| 5     | 0.0251 | 0.0178 | 30.1349 |
+| 10    | 0.0315 | 0.0212 | 27.2948 |
+| 25    | 0.0375 | 0.0243 | 26.896 |
+| 100   | 0.0324 | 0.0232 | 28.0 |
 
 _Mean Scores by K_
 
 <!-- ![](images/network_means_vs_k.png) -->
+
+![](images/neural_cf_results.png)
 
 
 
